@@ -19,17 +19,30 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from pydantic import BaseModel, validator
+from repository.users import get_user_by_email
+from common.crypto import sha3_512_string, create_jwt
+from common.config import config
+
+import datetime
 
 
-class LoginBody(BaseModel):
-    email: str
-    password: str
+def login(email: str, password: str) -> str:
+    user = get_user_by_email(email)
 
-    @validator('email')
-    def email_must_be_valid(cls, v):
-        # Simple example of custom email validation logic
-        if "@" not in v or "." not in v:
-            raise ValueError('Invalid email address')
-        # Add any custom validation logic here
-        return v
+    if not user:
+        return ""
+
+    are_valid_credentials = user.password == sha3_512_string(password)
+
+    if not are_valid_credentials:
+        return ""
+
+    payload = {
+        "user_id": user.user_id,
+        "email": user.email,
+        # By Default, Sessions will expire in 48 hours
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=48),
+        "role": user.role_name
+    }
+
+    return create_jwt(config.SECRET_KEY_JWT, payload)

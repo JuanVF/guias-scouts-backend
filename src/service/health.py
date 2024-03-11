@@ -19,17 +19,16 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from pydantic import BaseModel, validator
+from common.db import connection
 
 
-class LoginBody(BaseModel):
-    email: str
-    password: str
+def is_db_healthy() -> bool:
+    """
+    Returns true if the DB is Healthy
+    """
+    try:
+        connection.execute_read_query('SELECT 1')
 
-    @validator('email')
-    def email_must_be_valid(cls, v):
-        # Simple example of custom email validation logic
-        if "@" not in v or "." not in v:
-            raise ValueError('Invalid email address')
-        # Add any custom validation logic here
-        return v
+        return True
+    except:
+        return False

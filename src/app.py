@@ -21,6 +21,7 @@
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from flask import Flask
 from controller.authentication import auth_blueprint
+from controller.health import health_blueprint
 from flasgger import Swagger
 
 app = Flask(__name__)
@@ -29,6 +30,7 @@ swagger = Swagger(app)
 
 # All routes
 app.register_blueprint(auth_blueprint)
+app.register_blueprint(health_blueprint)
 
 if __name__ == '__main__':
     app.run(debug=True)

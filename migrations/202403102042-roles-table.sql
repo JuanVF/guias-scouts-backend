@@ -19,3 +19,17 @@
 -- of this software, even if advised of the possibility of such damage.
 --
 -- For licensing opportunities, please contact tropa92cr@gmail.com.
+-- Create t_roles_table
+USE `guias-scouts`;
+
+CREATE TABLE t_roles_table (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(40)
+) ENGINE = InnoDB;
+
+-- Default values
+INSERT INTO
+    t_roles_table (name)
+VALUES
+    ('dirigente'),
+    ('protagonista');

@@ -19,17 +19,28 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from pydantic import BaseModel, validator
+import hashlib
+import jwt
 
 
-class LoginBody(BaseModel):
-    email: str
-    password: str
+def sha3_512_string(input_string):
+    """
+    Returns the SHA-3 512 bits in string format
+    """
+    # Convert the input string to bytes
+    input_bytes = input_string.encode('utf-8')
 
-    @validator('email')
-    def email_must_be_valid(cls, v):
-        # Simple example of custom email validation logic
-        if "@" not in v or "." not in v:
-            raise ValueError('Invalid email address')
-        # Add any custom validation logic here
-        return v
+    # Compute the SHA-3 hash with 512 bits output
+    sha3_hash = hashlib.sha3_512(input_bytes).digest()
+
+    # Convert the hash bytes to a hexadecimal string
+    hash_string = sha3_hash.hex()
+
+    return hash_string
+
+
+def create_jwt(secret_key: str, payload) -> str:
+    """
+    Creates the JWT Token using the secret key and the payload
+    """
+    return jwt.encode(payload, secret_key, algorithm='HS256')
