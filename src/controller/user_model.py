@@ -19,23 +19,9 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from functools import wraps
-from flask import request
-
-from common.response import get_response
+from pydantic import BaseModel, validator
 
 
-def is_json_content_type():
-    """
-    Middleware to check if the body received is JSON type
-    """
-    def _is_json_content_type(f):
-        @wraps(f)
-        def __is_json_content_type(*args, **kwargs):
-            content_type = request.headers.get('Content-Type')
-
-            if (content_type != "application/json"):
-                return get_response(400, 'Content-Type Not Supported!')
-            return f(*args, **kwargs)
-        return __is_json_content_type
-    return _is_json_content_type
+class ChangePasswordBody(BaseModel):
+    prevPassword: str
+    newPassword: str

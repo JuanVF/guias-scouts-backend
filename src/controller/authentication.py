@@ -37,7 +37,7 @@ def login():
     Login Endpoint, returns a JWT if correct credentials.
     ---
     tags:
-      - Authentication
+      - Authentication, user
     consumes:
       - application/json
     parameters:
@@ -65,6 +65,16 @@ def login():
         schema:
           type: object
           properties:
+            message:
+              type: string
+              description: Response Message
+              example: OK
+            redirect:
+              type: string
+              description: |
+                If an action is required before login. 
+                NEED_TO_CONFIRM : Needs to confirm user before
+              enum: [NEED_TO_CONFIRM]
             token:
               type: string
               description: JWT token
@@ -99,7 +109,7 @@ def confirm_user():
     Confirm User, returns a JWT if correct confirm code.
     ---
     tags:
-      - Authentication
+      - Authentication, user
     consumes:
       - application/json
     parameters:
