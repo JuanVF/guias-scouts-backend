@@ -21,6 +21,9 @@
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from common.db import connection
 
+DIRIGENTE_ROLE = 'dirigente'
+PROTAGONISTA_ROLE = 'protagonista'
+
 
 class User:
     def __init__(self, user_id, fullname, email, password, birthday, active, created_at, patrol_id, role_id, patrol_name, role_name):

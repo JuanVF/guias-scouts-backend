@@ -19,23 +19,36 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from functools import wraps
-from flask import request
+from repository.users import get_user_by_email, update_user_by_id
+from common.crypto import sha3_512_string
+from common.config import config
 
-from common.response import get_response
+import datetime
+
+ERROR_PASSWORD_MISMATCH = "ERROR_PASSWORD_MISMATCH"
+ERROR_USER_DOES_NOT_EXISTS = "ERROR_USER_DOES_NOT_EXISTS"
+ERROR_MESSAGE = "ERROR_MESSAGE"
 
 
-def is_json_content_type():
+def change_password(email: str, prevPassword: str, newPassword: str) -> str:
     """
-    Middleware to check if the body received is JSON type
+    Service that can change the user password. Return empty string if everything is right
     """
-    def _is_json_content_type(f):
-        @wraps(f)
-        def __is_json_content_type(*args, **kwargs):
-            content_type = request.headers.get('Content-Type')
+    user = get_user_by_email(email)
 
-            if (content_type != "application/json"):
-                return get_response(400, 'Content-Type Not Supported!')
-            return f(*args, **kwargs)
-        return __is_json_content_type
-    return _is_json_content_type
+    if not user:
+        return ERROR_USER_DOES_NOT_EXISTS
+
+    are_valid_credentials = user.password == sha3_512_string(prevPassword)
+
+    if not are_valid_credentials:
+        return ERROR_PASSWORD_MISMATCH
+
+    user.password = sha3_512_string(newPassword)
+
+    updated = update_user_by_id(user)
+
+    if not updated:
+        return ERROR_MESSAGE
+
+    return ""
