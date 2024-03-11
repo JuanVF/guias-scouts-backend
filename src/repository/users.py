@@ -72,3 +72,27 @@ def get_user_by_email(email: str):
         return None
     except:
         return None
+
+
+def update_user_by_id(user: User) -> bool:
+    """
+    Updates the user data by its id
+    """
+    try:
+        params = (user.fullname, user.patrol_id, user.email,
+                  user.birthday, user.password, user.active, user.role_id, user.user_id,)
+        result = connection.execute_query("""UPDATE t_users_table
+            SET fullname = %s,
+                id_patrol = %s,
+                email = %s,
+                birthday = %s, 
+                password = %s,
+                active = %s,
+                id_role = %s
+            WHERE
+                id = %s;""", params)
+
+        return True
+    except Exception as error:
+        print(error)
+        return False
