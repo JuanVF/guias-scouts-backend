@@ -19,17 +19,33 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from pydantic import BaseModel, validator
+from flask import Blueprint
+from service.health import is_db_healthy
+from common.response import get_response
+
+health_blueprint = Blueprint('health', __name__, url_prefix='/health')
 
 
-class LoginBody(BaseModel):
-    email: str
-    password: str
+@health_blueprint.route("/db", methods=['GET'])
+def health():
+    """
+    DB Health endpoint. Checks if DB connection is up and running.
+    ---
+    tags:
+      - Authentication
+    responses:
+      200:
+        description: DB Health Status
+      500:
+        description: DB Is not healthy
+    """
+    is_healthy = is_db_healthy()
 
-    @validator('email')
-    def email_must_be_valid(cls, v):
-        # Simple example of custom email validation logic
-        if "@" not in v or "." not in v:
-            raise ValueError('Invalid email address')
-        # Add any custom validation logic here
-        return v
+    data = {
+        "message": "DB is not healthy..."
+    }
+
+    if (is_healthy):
+        data['message'] = "DB is healthy!"
+
+    return get_response(200, data)

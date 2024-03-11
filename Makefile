@@ -23,9 +23,18 @@
 build:
 	docker build . -t guias-scouts-backend:$(TAG)
 
+build_db:
+	docker build -f Dockerfile.db -t guias-scouts-db:$(TAG) .
+
 run_dev:
 	export FLASK_APP=src/app.py
 	cd src && python -m flask run
+
+start_dev_env:
+	docker compose -f ./docker-compose.dev.yaml up -d 
+
+destroy_dev_env:
+	docker compose -f ./docker-compose.dev.yaml down
 
 new_migration:
 	@file_path="./migrations/$$(date "+%Y%m%d%H%M")-$(NAME).sql"; \

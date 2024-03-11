@@ -19,17 +19,23 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from pydantic import BaseModel, validator
+import os
 
 
-class LoginBody(BaseModel):
-    email: str
-    password: str
+class Config:
+    def __init__(self):
+        """Load environment variables."""
+        self.DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
+        self.DB_USERNAME = os.getenv('DB_USERNAME', 'root')
+        self.DB_PASSWORD = os.getenv('DB_PASSWORD', 'tea')
+        self.DB_DATABASE = os.getenv('DB_DATABASE', 'guias-scouts')
+        self.MINIO_ENDPOINT = os.getenv(
+            'MINIO_ENDPOINT', 'localhost:9000')
+        self.MINIO_ACCESS_KEY = os.getenv(
+            'MINIO_ACCESS_KEY', 'minioadmin')
+        self.MINIO_SECRET_KEY = os.getenv(
+            'MINIO_SECRET_KEY', 'minioadmin')
+        self.SECRET_KEY_JWT = os.getenv('SECRET_KEY_JWT', 'wiuwiuwiu')
 
-    @validator('email')
-    def email_must_be_valid(cls, v):
-        # Simple example of custom email validation logic
-        if "@" not in v or "." not in v:
-            raise ValueError('Invalid email address')
-        # Add any custom validation logic here
-        return v
+
+config = Config()
