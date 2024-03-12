@@ -33,9 +33,13 @@ def is_json_content_type():
         @wraps(f)
         def __is_json_content_type(*args, **kwargs):
             content_type = request.headers.get('Content-Type')
-
-            if (content_type != "application/json"):
-                return get_response(400, 'Content-Type Not Supported!')
+            if content_type:
+                media_type = content_type.split(
+                    ';')[0].strip()  # Extract media type part
+                if media_type != "application/json":
+                    return get_response(400, 'Content-Type Not Supported!')
+            else:
+                return get_response(400, 'Content-Type Header Missing!')
             return f(*args, **kwargs)
         return __is_json_content_type
     return _is_json_content_type

@@ -24,10 +24,12 @@ from controller.authentication import auth_blueprint
 from controller.health import health_blueprint
 from controller.user import user_blueprint
 from flasgger import Swagger
+from flask_cors import CORS
 
 app = Flask(__name__)
 
 swagger = Swagger(app)
+CORS(app)
 
 # All routes
 app.register_blueprint(auth_blueprint)

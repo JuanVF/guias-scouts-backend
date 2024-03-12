@@ -36,7 +36,7 @@ RUN python3 -m venv /venv
 ENV PATH="/venv/bin:$PATH"
 
 # Install all python dependencies
-RUN pip install flask pydantic flasgger mysql-connector-python PyJWT
+RUN pip install flask pydantic flasgger mysql-connector-python PyJWT flask-cors
 
 # Create the user backend and grant permissions to run the project
 RUN adduser -D backend
