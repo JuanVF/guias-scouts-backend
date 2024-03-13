@@ -149,6 +149,8 @@ def save_user(user: User) -> bool:
             (fullname, email, password, birthday, active, id_role, id_patrol, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s);""", params)
 
+        print("Usuario guardado")
+
         return True
     except Exception as error:
         print("Error saving user:", error)

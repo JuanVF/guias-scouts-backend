@@ -20,7 +20,7 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from repository.users import get_user_by_email, update_user_by_id
-from repository.codes import get_latest_code_by_user_email
+from repository.codes import get_latest_code_by_user_email, get_all_codes
 from common.crypto import sha3_512_string, create_jwt
 from common.config import config
 
@@ -67,6 +67,12 @@ def confirm_code(email: str, code: str) -> str:
     If already active will return "ALREADY_ACTIVE"
     else will return empty string
     """
+
+    print("???")
+    codes = get_all_codes()
+
+    print(codes)
+
     user = get_user_by_email(email)
 
     if not user:
