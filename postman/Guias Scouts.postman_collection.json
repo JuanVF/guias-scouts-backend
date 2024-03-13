@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2264cba8-c858-4ed6-91d7-d2a2db145838",
+		"_postman_id": "dbef1199-169e-4ab8-b492-5824713f6dc3",
 		"name": "Guias Scouts",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "33573157"
+		"_exporter_id": "25882160"
 	},
 	"item": [
 		{
@@ -23,7 +23,8 @@
 									"// Set the token as an environment variable\r",
 									"pm.environment.set(\"jwt_token\", token);"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -176,6 +177,34 @@
 							"path": [
 								"user",
 								"register-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/profile",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"profile"
 							]
 						}
 					},

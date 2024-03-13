@@ -20,17 +20,15 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 
-from repository.users import get_user_by_email, update_user_by_id, save_user, User
+from repository.users import get_user_by_email, update_user_by_id, save_user, User, get_user_by_id
+from repository.codes import insert_code_by_user_id
 from common.crypto import sha3_512_string
 from common.config import config
-import random
-import string
-import os
-import datetime
+from common.time import current_timestamp
+from common.text import generate_confirmation_code
 from email.message import EmailMessage
 import ssl
 import smtplib
-from common.config import Config
 
 ERROR_PASSWORD_MISMATCH = "ERROR_PASSWORD_MISMATCH"
 ERROR_USER_DOES_NOT_EXISTS = "ERROR_USER_DOES_NOT_EXISTS"
@@ -61,20 +59,30 @@ def change_password(email: str, prevPassword: str, newPassword: str) -> str:
     return ""
 
 
-def generate_confirmation_code():
+def get_user(user_id: str) -> dict:
     """
-    Generate a unique confirmation code consisting of 3 uppercase letters followed by 3 random digits.
+    Service that can get the user information by its id
     """
-    # Generar tres letras mayúsculas aleatorias
-    letters = ''.join(random.choices(string.ascii_uppercase, k=3))
+    user = get_user_by_id(user_id)
 
-    # Generar tres dígitos aleatorios
-    numbers = ''.join(random.choices(string.digits, k=3))
+    if not user:
+        return None
 
-    # Combinar las letras y los números para formar el código de confirmación
-    confirmation_code = f"{letters}{numbers}"
+    if user.active == 0:
+        return None
 
-    return confirmation_code
+    return {
+        "id": user_id,
+        "fullname": user.fullname,
+        "email": user.email,
+        "birthday": user.birthday,
+        "active": user.active,
+        "created_at": user.created_at,
+        "id_patrol": user.patrol_id,
+        "id_role": user.role_id,
+        "patrol_name": user.patrol_name,
+        "role_name": user.role_name
+    }
 
 
 def send_confirmation_code(email_receiver, confirmation_code):
@@ -83,7 +91,8 @@ def send_confirmation_code(email_receiver, confirmation_code):
     password = config.SENDER_EMAIL_PASSWORD
 
     subject = "Codigo de verificación - Guías Scouts"
-    body = "Tu código de verificación es {}, no compartas este código con ninguna persona".format(confirmation_code)
+    body = "Tu código de verificación es {}, no compartas este código con ninguna persona".format(
+        confirmation_code)
 
     email = EmailMessage()
     email["From"] = email_sender
@@ -98,7 +107,7 @@ def send_confirmation_code(email_receiver, confirmation_code):
         smtp.sendmail(email_sender, email_receiver, email.as_string())
 
 
-def create_user(fullname: str, email: str, password: str, birthday: str):
+def create_user(fullname: str, email: str, password: str, birthday: str, id_patrol: int, id_role: int):
     """
     Create a new user and generate confirmation code.
     """
@@ -108,13 +117,24 @@ def create_user(fullname: str, email: str, password: str, birthday: str):
 
         # Crear un objeto User con los datos proporcionados
         user = User(
-            1, fullname, email, sha3_512_string(password), birthday, 0, 0, 1, 1, "", ""
+            1, fullname, email, sha3_512_string(
+                password), birthday, 0, current_timestamp(), id_patrol, id_role, "", ""
         )
 
-        send_confirmation_code(user.email, confirmation_code)
-
         # Guardar el usuario en la base de datos
-        save_user(user)
+        user_id = save_user(user)
+
+        if user_id == None:
+            return ERROR_MESSAGE
+
+        user.user_id = user_id
+
+        succed_code_insert = insert_code_by_user_id(confirmation_code, user_id)
+
+        if not succed_code_insert:
+            return ERROR_MESSAGE
+
+        send_confirmation_code(user.email, confirmation_code)
 
         return user
     except Exception as e:
@@ -136,4 +156,3 @@ def forgot_password(email: str):
     send_confirmation_code(user.email, confirmation_code)
 
     return user, confirmation_code
-

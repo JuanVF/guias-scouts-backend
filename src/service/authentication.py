@@ -67,12 +67,6 @@ def confirm_code(email: str, code: str) -> str:
     If already active will return "ALREADY_ACTIVE"
     else will return empty string
     """
-
-    print("???")
-    codes = get_all_codes()
-
-    print(codes)
-
     user = get_user_by_email(email)
 
     if not user:

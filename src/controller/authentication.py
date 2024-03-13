@@ -26,7 +26,6 @@ from common.response import get_response
 from service.authentication import CONFIRM_CODE_MESSAGE, ERROR_MESSAGE, ALREADY_ACTIVE
 from service.authentication import login as service_login
 from service.authentication import confirm_code as service_confirm_code
-from flask_jwt_extended import unset_jwt_cookies
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 

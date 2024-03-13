@@ -19,18 +19,22 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from pydantic import BaseModel, validator
+
+import random
+import string
 
 
-class ChangePasswordBody(BaseModel):
-    prevPassword: str
-    newPassword: str
+def generate_confirmation_code():
+    """
+    Generate a unique confirmation code consisting of 3 uppercase letters followed by 3 random digits.
+    """
+    # Generar tres letras mayúsculas aleatorias
+    letters = ''.join(random.choices(string.ascii_uppercase, k=3))
 
+    # Generar tres dígitos aleatorios
+    numbers = ''.join(random.choices(string.digits, k=3))
 
-class RegisterUserBody(BaseModel):
-    fullname: str
-    email: str
-    password: str
-    birthday: int
-    id_patrol: int
-    id_role: int
+    # Combinar las letras y los números para formar el código de confirmación
+    confirmation_code = f"{letters}{numbers}"
+
+    return confirmation_code
