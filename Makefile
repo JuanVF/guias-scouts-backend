@@ -28,13 +28,13 @@ build_db:
 
 run_dev:
 	export FLASK_APP=src/app.py
-	cd src && python -m flask run
+	cd src && python3 -m flask run
 
 start_dev_env:
-	docker compose -f ./docker-compose.dev.yaml up -d 
+	docker-compose -f ./docker-compose.dev.yaml up -d
 
 destroy_dev_env:
-	docker compose -f ./docker-compose.dev.yaml down
+	docker-compose -f ./docker-compose.dev.yaml down
 
 new_migration:
 	@file_path="./migrations/$$(date "+%Y%m%d%H%M")-$(NAME).sql"; \
