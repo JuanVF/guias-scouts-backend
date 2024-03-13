@@ -25,3 +25,10 @@ from pydantic import BaseModel, validator
 class ChangePasswordBody(BaseModel):
     prevPassword: str
     newPassword: str
+
+
+class RegisterUserBody(BaseModel):
+    fullname: str
+    email: str
+    password: str
+    birthday: int

@@ -26,6 +26,7 @@ from common.response import get_response
 from service.authentication import CONFIRM_CODE_MESSAGE, ERROR_MESSAGE, ALREADY_ACTIVE
 from service.authentication import login as service_login
 from service.authentication import confirm_code as service_confirm_code
+from flask_jwt_extended import unset_jwt_cookies
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -163,3 +164,16 @@ def confirm_user():
         return get_response(200, {"message": "OK", "token": token})
     except:
         return get_response(400, {"message": "Invalid Body"})
+
+
+def logout():
+    """
+    Logout Endpoint, invalidates the JWT token.
+    """
+    try:
+        # Elimina las cookies del token JWT
+        unset_jwt_cookies()
+
+        return get_response(200, {"message": "Logged out successfully"})
+    except Exception as e:
+        return get_response(500, {"message": "An error occurred while logging out"})

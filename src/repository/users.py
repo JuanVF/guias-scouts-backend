@@ -77,6 +77,43 @@ def get_user_by_email(email: str):
         return None
 
 
+def get_user_by_id(user_id: int):
+    """
+    Query a user by its ID
+    """
+    try:
+        params = (user_id, )
+        user_data = connection.execute_read_query("""SELECT 
+                u.id AS user_id,
+                u.fullname AS user_fullname,
+                u.email AS user_email,
+                u.password AS user_password,
+                u.birthday AS user_birthday,
+                u.active AS user_active,
+                u.created_at AS user_created_at,
+                u.id_patrol AS patrol_id,
+                u.id_role AS id_role,
+                p.name AS patrol_name,
+                r.name AS role_name
+            FROM 
+                `guias-scouts`.t_users_table u
+            LEFT JOIN 
+                `guias-scouts`.t_patrols_table p ON u.id_patrol = p.id
+            INNER JOIN 
+                `guias-scouts`.t_roles_table r ON u.id_role = r.id
+            WHERE
+                u.id = %s;""", params)
+
+        if user_data and len(user_data) > 0:
+            user = User(*user_data[0])
+
+            return user
+
+        return None
+    except:
+        return None
+
+
 def update_user_by_id(user: User) -> bool:
     """
     Updates the user data by its id
@@ -97,5 +134,22 @@ def update_user_by_id(user: User) -> bool:
 
         return True
     except Exception as error:
-        print(error)
+        print("Error updating user: ", error)
+        return False
+
+
+def save_user(user: User) -> bool:
+    """
+    Save the user to the database.
+    """
+    try:
+        params = (user.fullname, user.email, user.password, user.birthday, user.active, user.role_id, user.patrol_id,
+                  user.created_at,)
+        result = connection.execute_query("""INSERT INTO t_users_table
+            (fullname, email, password, birthday, active, id_role, id_patrol, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s);""", params)
+
+        return True
+    except Exception as error:
+        print("Error saving user:", error)
         return False

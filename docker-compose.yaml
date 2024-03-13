@@ -39,6 +39,8 @@ services:
       - MINIO_ACCESS_KEY=minioadmin
       - MINIO_SECRET_KEY=minioadmin
       - SECRET_KEY_JWT=wiuwiuwiuwiu
+      - SENDER_EMAIL=tropa92cr@gmail.com
+      - SENDER_EMAIL_PASSWORD=xteg jikb icmz ibup
     ports:
       - "5000:5000"
     networks:

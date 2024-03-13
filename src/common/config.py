@@ -36,6 +36,8 @@ class Config:
         self.MINIO_SECRET_KEY = os.getenv(
             'MINIO_SECRET_KEY', 'minioadmin')
         self.SECRET_KEY_JWT = os.getenv('SECRET_KEY_JWT', 'wiuwiuwiu')
+        self.SENDER_EMAIL = os.getenv('SENDER_EMAIL', 'tropa92cr@gmail.com')
+        self.SENDER_EMAIL_PASSWORD = os.getenv('SENDER_EMAIL_PASSWORD', 'xteg jikb icmz ibup')
 
 
 config = Config()

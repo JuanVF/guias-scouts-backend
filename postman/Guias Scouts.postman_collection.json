@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2f7ac723-ac7e-45f5-a5fb-5c8c8a360267",
+		"_postman_id": "2264cba8-c858-4ed6-91d7-d2a2db145838",
 		"name": "Guias Scouts",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25882160"
+		"_exporter_id": "33573157"
 	},
 	"item": [
 		{
@@ -139,6 +139,43 @@
 							"path": [
 								"user",
 								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullname\": \"Miguel Sanchez\",\n    \"email\": \"miguelsanchez712000@gmail.com\",\n    \"password\": \"password\",\n    \"birthday\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/register-user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"register-user"
 							]
 						}
 					},

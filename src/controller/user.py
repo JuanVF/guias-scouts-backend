@@ -25,7 +25,11 @@ from controller.authorization_middleware import extract_jwt_token
 from common.response import get_response
 from service.users import change_password as service_change_password
 from service.users import ERROR_MESSAGE, ERROR_PASSWORD_MISMATCH, ERROR_USER_DOES_NOT_EXISTS
-from controller.user_model import ChangePasswordBody
+from controller.user_model import ChangePasswordBody, RegisterUserBody
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from repository.users import get_user_by_id
+from service.users import create_user
+
 
 user_blueprint = Blueprint('user', __name__, url_prefix='/user')
 
@@ -89,6 +93,48 @@ def change_password(decoded_token):
 
         if result == ERROR_MESSAGE:
             return get_response(400, {"message": "An error has ocurred, please try again..."})
+
+        return get_response(200, {"message": "OK"})
+    except:
+        return get_response(400, {"message": "Invalid Body"})
+
+
+@user_blueprint.route("/profile", methods=['GET'])
+@jwt_required()
+def get_profile():
+    """
+    Get User Profile Endpoint, retrieves user information.
+    """
+    try:
+        # Obtener la identidad del usuario desde el token JWT
+        current_user_id = get_jwt_identity()
+
+        # Obtener la información del usuario desde la base de datos utilizando el correo electrónico
+        user = get_user_by_id(current_user_id)
+
+        if user:
+            # Convertir el objeto User a un diccionario para serializarlo como JSON
+            user_data = {
+                "fullname": user.fullname,
+                "email": user.email,
+                "birthday": user.birthday,
+                "patrol_name": user.patrol_name,
+                "role_name": user.role_name
+            }
+            return get_response(200, {"user": user_data})
+        else:
+            return get_response(404, {"message": "User not found"})
+    except Exception as e:
+        return get_response(500, {"message": "An error occurred while fetching user profile"})
+
+
+@user_blueprint.route("/register-user", methods=['POST'])
+@is_json_content_type()
+def register_user():
+    try:
+        body = RegisterUserBody(**request.json)
+
+        create_user(body.fullname, body.email, body.password, body.birthday)
 
         return get_response(200, {"message": "OK"})
     except:
