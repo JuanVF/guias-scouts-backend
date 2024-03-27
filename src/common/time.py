@@ -19,18 +19,8 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from pydantic import BaseModel, validator
+import time
 
 
-class ChangePasswordBody(BaseModel):
-    prevPassword: str
-    newPassword: str
-
-
-class RegisterUserBody(BaseModel):
-    fullname: str
-    email: str
-    password: str
-    birthday: int
-    id_patrol: int
-    id_role: int
+def current_timestamp():
+    return int(time.time())

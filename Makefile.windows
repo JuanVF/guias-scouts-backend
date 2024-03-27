@@ -19,18 +19,12 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from pydantic import BaseModel, validator
+wrun_dev:
+	export FLASK_APP=src/app.py
+	cd src && python -m flask run
 
+wstart_dev_env:
+	docker compose -f ./docker-compose.dev.yaml up -d
 
-class ChangePasswordBody(BaseModel):
-    prevPassword: str
-    newPassword: str
-
-
-class RegisterUserBody(BaseModel):
-    fullname: str
-    email: str
-    password: str
-    birthday: int
-    id_patrol: int
-    id_role: int
+wdestroy_dev_env:
+	docker compose -f ./docker-compose.dev.yaml down

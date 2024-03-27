@@ -20,6 +20,7 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from common.db import connection
+from typing import Optional
 
 DIRIGENTE_ROLE = 'dirigente'
 PROTAGONISTA_ROLE = 'protagonista'
@@ -121,7 +122,7 @@ def update_user_by_id(user: User) -> bool:
     try:
         params = (user.fullname, user.patrol_id, user.email,
                   user.birthday, user.password, user.active, user.role_id, user.user_id,)
-        result = connection.execute_query("""UPDATE t_users_table
+        result = connection.execute_query("""UPDATE `guias-scouts`.t_users_table
             SET fullname = %s,
                 id_patrol = %s,
                 email = %s,
@@ -138,20 +139,26 @@ def update_user_by_id(user: User) -> bool:
         return False
 
 
-def save_user(user: User) -> bool:
+def save_user(user: User) -> Optional[int]:
     """
-    Save the user to the database.
+    Save the user to the database and return the user ID.
     """
     try:
-        params = (user.fullname, user.email, user.password, user.birthday, user.active, user.role_id, user.patrol_id,
-                  user.created_at,)
-        result = connection.execute_query("""INSERT INTO t_users_table
+        params = (user.fullname, user.email, user.password, user.birthday,
+                  user.active, user.role_id, user.patrol_id, user.created_at, )
+
+        connection.execute_query("""INSERT INTO `guias-scouts`.t_users_table
             (fullname, email, password, birthday, active, id_role, id_patrol, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s);""", params)
 
-        print("Usuario guardado")
+        result = connection.execute_read_query(
+            """SELECT LAST_INSERT_ID() as user_id;""")
 
-        return True
+        # After insertion, retrieve the ID of the newly inserted user
+        if result and len(result) > 0:
+            return result[0][0]
+
+        return None
     except Exception as error:
         print("Error saving user:", error)
-        return False
+        return None

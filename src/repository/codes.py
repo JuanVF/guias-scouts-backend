@@ -20,7 +20,7 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from common.db import connection
-import time
+from common.time import current_timestamp
 
 
 class Code:
@@ -50,11 +50,12 @@ def get_all_codes():
 
         if code_data and len(code_data) > 0:
             for i in range(0, len(code_data)):
-                codes[i] += [Code(*code_data[i])]
+                codes += [Code(*code_data[i])]
 
         return codes
     except:
         return None
+
 
 def get_latest_code_by_user_email(email: str):
     """
@@ -93,17 +94,13 @@ def get_latest_code_by_user_email(email: str):
         return None
 
 
-def current_timestamp():
-    return int(time.time())
-
-
-def insert_last_code_related_to_user(code, user_id):
+def insert_code_by_user_id(code, user_id):
     """
     Insert the last generated code related to a user into the database.
     """
     try:
         created_at = current_timestamp()
-        params = (code, created_at, user_id)
+        params = (code, created_at, user_id, )
         connection.execute_query("""INSERT INTO t_codes_table (code, created_at, id_user) VALUES (%s, %s, %s)""",
                                  params)
         return True
