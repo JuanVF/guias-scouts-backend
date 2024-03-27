@@ -19,21 +19,11 @@
 -- of this software, even if advised of the possibility of such damage.
 --
 -- For licensing opportunities, please contact tropa92cr@gmail.com.
--- Create t_patrols_table
+-- Create t_material_table
 USE `guias-scouts`;
 
-SET
-    GLOBAL default_table_encryption = ON;
-
-CREATE TABLE t_patrols_table (
+CREATE TABLE t_material_table (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(40)
+    title VARCHAR(40) NOT NULL,
+    document BLOB NOT NULL,
 ) ENGINE = InnoDB;
-
--- Default values
-INSERT INTO
-    t_patrols_table (name)
-VALUES
-    ('Lobos'),
-    ('Toros'),
-    ('Chorlitos');
