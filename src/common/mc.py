@@ -87,6 +87,20 @@ class MCHandler:
             print(
                 f"MC-Error: an error ocurred while getting the shared url for file '{path}'")
 
+    def save_file(self, filename):
+        """Gets a file from MinIO using mc"""
+        try:
+            args = [
+                "cp", f"media/{filename}", f"{self.alias}/{self.bucket}/{filename}"]
+
+            succeed = self.__execute(args)
+
+            if not succeed:
+                raise Exception("")
+        except Exception as e:
+            print(
+                f"MC-Error: an error ocurred while getting the saving the file '{filename}'")
+
     def connect(self):
         """Establishes the MinIO alias with mc"""
         try:
