@@ -20,6 +20,7 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from common.db import connection
+from common.mc import MCHandler
 
 
 def is_db_healthy() -> bool:

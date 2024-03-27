@@ -30,6 +30,7 @@ RUN curl -O https://dl.min.io/client/mc/release/linux-amd64/mc && \
 # Set the workdir
 WORKDIR /app
 COPY src/ /app
+RUN mkdir /app/media/
 
 # Set the virtual Environment
 RUN python3 -m venv /venv

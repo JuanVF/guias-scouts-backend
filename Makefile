@@ -61,3 +61,5 @@ new_migration:
 	echo "--" >> $$file_path; \
 	echo "-- For licensing opportunities, please contact tropa92cr@gmail.com." >> $$file_path; \
 	echo "File [$$file_path] Created"
+
+include Makefile.windows

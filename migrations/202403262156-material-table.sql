@@ -25,5 +25,9 @@ USE `guias-scouts`;
 CREATE TABLE t_material_table (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(40) NOT NULL,
-    document BLOB NOT NULL,
+    file_path VARCHAR(200) NOT NULL,
+    file_type VARCHAR(10) NOT NULL,
+    created_at INT NOT NULL,
+    created_by VARCHAR(50) NOT NULL,
+    active TINYINT(1) NOT NULL
 ) ENGINE = InnoDB;

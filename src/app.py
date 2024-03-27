@@ -23,6 +23,7 @@ from flask import Flask
 from controller.authentication import auth_blueprint
 from controller.health import health_blueprint
 from controller.user import user_blueprint
+from controller.media import media_blueprint
 from flasgger import Swagger
 from flask_cors import CORS
 
@@ -35,6 +36,7 @@ CORS(app)
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(health_blueprint)
 app.register_blueprint(user_blueprint)
+app.register_blueprint(media_blueprint)
 
 if __name__ == '__main__':
     app.run(debug=True)
