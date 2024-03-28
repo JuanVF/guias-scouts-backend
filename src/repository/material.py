@@ -89,19 +89,42 @@ def search_materials(q: str) -> List[Material]:
         return []
 
 
-def delete_material_by_id(material_id: int):
+def get_material_by_id(id: str) -> Material:
     """
-    Delete material by its ID
+    Get a material by its id
     """
     try:
-        params = (material_id,)
-        result = connection.execute_query("""
-                    DELETE FROM t_material_table
-                    WHERE id = %s;
-                """, params)
+        params = (id, )
+        material_data = connection.execute_read_query("""SELECT 
+                                                                id, title, file_path, file_type, created_at, created_by, active, url
+                                                            FROM `guias-scouts`.t_materials_table
+                                                            WHERE id = %s;""", params)
 
-        print("Material eliminado correctamente.")
+        if material_data and len(material_data) > 0:
+            return Material(*material_data[0])
+
+        return None
+    except:
+        return []
+
+
+def update_material_by_id(material: Material) -> bool:
+    """
+    Updates the material data by its id
+    """
+    try:
+        params = (material.title, material.file_path,
+                  material.file_type, material.active, material.url, material.material_id, )
+        connection.execute_query("""UPDATE `guias-scouts`.t_materials_table
+            SET title = %s,
+                file_path = %s,
+                file_type = %s, 
+                active = %s,
+                url = %s
+            WHERE
+                id = %s;""", params)
+
         return True
     except Exception as error:
-        print("Error al eliminar material:", error)
+        print("Error updating material: ", error)
         return False

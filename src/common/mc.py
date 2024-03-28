@@ -50,11 +50,8 @@ class MCHandler:
 
         to_execute = ["mc"] + args
 
-        print(to_execute)
-
         result = subprocess.run(
             to_execute, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        print(result.stderr)
 
         if result.returncode != 0:
             print(f"MCHandler-Error: Something wen't wrong {result.stderr}")

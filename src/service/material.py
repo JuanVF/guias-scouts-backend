@@ -20,13 +20,14 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 
-from repository.material import add_material, search_materials, Material
+from repository.material import add_material, search_materials, Material, get_material_by_id, update_material_by_id
 import base64
 from common.mc import mc_handler
 from common.time import current_timestamp
 import os
 
 ERROR_MESSAGE = "ERROR_MESSAGE"
+SUCCESS_MESSAGE = "SUCCESS_MESSAGE"
 
 
 def get_materials(q: str) -> list[dict]:
@@ -48,16 +49,32 @@ def get_materials(q: str) -> list[dict]:
     return results
 
 
+def delete_material(id: str) -> str:
+    """
+    Service that can archive/delete a material
+    """
+    material = get_material_by_id(id)
+
+    if material is None:
+        return ERROR_MESSAGE
+
+    material.active = 0
+
+    result = update_material_by_id(material)
+
+    if not result:
+        return ERROR_MESSAGE
+
+    return SUCCESS_MESSAGE
+
+
 def add_new_material(title: str, file: str, extension: str, email: str):
     """
     Service that can add a new material
     """
 
-    # El texto codificado en base64
-    encoded_data = file
-
     # Dividir la cadena por la coma y obtener la parte después de "base64"
-    _, base64_encoded_data = encoded_data.split(',', 1)
+    _, base64_encoded_data = file.split(',', 1)
 
     # Decodificar los datos base64
     decoded_data = base64.b64decode(base64_encoded_data)
@@ -66,10 +83,9 @@ def add_new_material(title: str, file: str, extension: str, email: str):
 
     # Nombre del archivo donde deseas guardar los datos
     file_name = title.replace(" ", "_") + "." + extension
+
     with open("media/"+file_name, "wb") as file:
         file.write(decoded_data)
-
-    print("Los datos se han guardado correctamente en el archivo:", file_name)
 
     url = mc_handler.save_file(file_name)
 
@@ -78,8 +94,9 @@ def add_new_material(title: str, file: str, extension: str, email: str):
 
     if url is None:
         return ERROR_MESSAGE
-    else:
-        add_material(material)
-        os.remove("media/"+file_name)
 
-        return True
+    add_material(material)
+
+    os.remove("media/"+file_name)
+
+    return SUCCESS_MESSAGE

@@ -32,7 +32,7 @@ def health():
     DB Health endpoint. Checks if DB connection is up and running.
     ---
     tags:
-      - Authentication
+      - system_health
     responses:
       200:
         description: DB Health Status
