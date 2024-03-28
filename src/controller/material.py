@@ -27,8 +27,8 @@ from controller.authorization_middleware import extract_jwt_token
 
 from common.response import get_response
 
-from service.material import get_document_in_route, add_new_material, remove_material
-from service.material import ERROR_MESSAGE, ERROR_USER_TYPE_MISMATCH, ERROR_USER_DOES_NOT_EXISTS
+from service.material import get_materials, add_new_material
+from service.material import ERROR_MESSAGE
 
 from repository.users import DIRIGENTE_ROLE
 
@@ -36,10 +36,10 @@ from controller.material_model import CreateMaterialModel
 
 material_blueprint = Blueprint('material', __name__, url_prefix='/material')
 
+
 @material_blueprint.route("/add-material", methods=['POST'])
 @is_json_content_type()
 @extract_jwt_token()
-
 def add_material(decoded_token):
     if decoded_token['role'] != DIRIGENTE_ROLE:
         return get_response(401, {"message": "Not enough privileges..."})
@@ -48,7 +48,62 @@ def add_material(decoded_token):
         if body.extension != "pdf":
             return get_response(401, {"message": "Not a pdf document..."})
         else:
-            add_new_material(body.title, body.file, body.extension, decoded_token['email'])
+            add_new_material(body.title, body.file,
+                             body.extension, decoded_token['email'])
             return get_response(200, {"message": "OK"})
+    except Exception as e:
+        return get_response(400, {"message": f"Invalid Body {e}"})
+
+
+@material_blueprint.route("/search", methods=['GET'])
+@extract_jwt_token()
+def change_password(token_payload):
+    """
+    Allows an user to change its password.
+    ---
+    tags:
+      - user
+    consumes:
+      - application/json
+    parameters:
+      - in: body
+        name: body
+        description: User's password data
+        required: true
+        schema:
+          type: object
+          required:
+            - prevPassword
+            - newPassword
+          properties:
+            prevPassword:
+              type: string
+              format: password
+              example: your_old_password
+            newPassword:
+              type: string
+              format: password
+              example: your_new_password
+    responses:
+      200:
+        description: Password Changed successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: Response Message
+              example: OK
+      400:
+        description: Invalid Body
+      401:
+        description: Invalid Code
+    """
+    try:
+        q = request.args.get('q', '')
+
+        materials = get_materials(q)
+
+        return get_response(200, {"message": "OK", "materials": materials})
     except Exception as e:
         return get_response(400, {"message": f"Invalid Body {e}"})

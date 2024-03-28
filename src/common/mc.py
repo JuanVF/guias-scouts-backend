@@ -43,13 +43,12 @@ class MCHandler:
             self.access_key = config.MC_ACCESS_KEY
             self.minio_url = config.MINIO_URL
             self.bucket = config.MC_BUCKET
-            self.mc_path = shutil.which('mc')
 
     def __execute(self, args) -> bool:
         if len(args) <= 0:
             return False
 
-        to_execute = [self.mc_path] + args
+        to_execute = ["mc"] + args
 
         print(to_execute)
 

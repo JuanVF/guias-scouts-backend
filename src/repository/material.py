@@ -20,6 +20,8 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from common.db import connection
+from typing import List
+
 
 class Material:
     def __init__(self, material_id, title, file_path, file_type, created_at, created_by, active, url):
@@ -59,10 +61,32 @@ def add_material(material: Material):
         """, params)
         return True
 
-
     except Exception as error:
         print("Error guardando material:", error)
         return False
+
+
+def search_materials(q: str) -> List[Material]:
+    """
+    Search over the materials
+    """
+    try:
+        materials = []
+
+        params = (q, )
+        materials_data = connection.execute_read_query("""SELECT 
+                                                                id, title, file_path, file_type, created_at, created_by, active, url
+                                                            FROM `guias-scouts`.t_materials_table
+                                                            WHERE title LIKE CONCAT('%', COALESCE(NULLIF(%s,''), title), '%')
+                                                            AND active = 1;""", params)
+
+        if materials_data and len(materials_data) > 0:
+            for i in range(0, len(materials_data)):
+                materials += [Material(*materials_data[i])]
+
+        return materials
+    except:
+        return []
 
 
 def delete_material_by_id(material_id: int):

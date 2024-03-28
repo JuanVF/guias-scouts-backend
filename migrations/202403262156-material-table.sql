@@ -19,10 +19,10 @@
 -- of this software, even if advised of the possibility of such damage.
 --
 -- For licensing opportunities, please contact tropa92cr@gmail.com.
--- Create t_material_table
+-- Create t_materials_table
 USE `guias-scouts`;
 
-CREATE TABLE t_material_table (
+CREATE TABLE t_materials_table (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(40) NOT NULL,
     file_path VARCHAR(200) NOT NULL,

@@ -38,6 +38,5 @@ app.register_blueprint(health_blueprint)
 app.register_blueprint(user_blueprint)
 app.register_blueprint(material_blueprint)
 
-
 if __name__ == '__main__':
     app.run(debug=True)

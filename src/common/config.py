@@ -33,9 +33,9 @@ class Config:
         self.MINIO_URL = os.getenv('MINIO_URL', 'http://localhost:9000')
         self.MC_ALIAS = os.getenv('MC_ALIAS', 'guias-scouts-materials')
         self.MC_BUCKET = os.getenv('MC_BUCKET', 'workspace-guias-scouts')
-        self.MC_ACCESS_KEY = os.getenv('MC_ACCESS_KEY', 'AZygNJDCYkMrFF14aArh')
+        self.MC_ACCESS_KEY = os.getenv('MC_ACCESS_KEY', 'yH0y8Lc9u9Vyg9jYVJYd')
         self.MC_SECRET_KEY = os.getenv(
-            'MC_SECRET_KEY', 'cqT0k4lHrQMagecDP6UMfUKcxlMQT0HQRbGaTYoi')
+            'MC_SECRET_KEY', '2Owv8WbwkVZI8usKFgAozuRGdJ5InvaXubgqrTJM')
         self.MINIO_ENDPOINT = os.getenv(
             'MINIO_ENDPOINT', 'localhost:9000')
         self.MINIO_ACCESS_KEY = os.getenv(
