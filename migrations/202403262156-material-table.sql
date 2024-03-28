@@ -29,5 +29,6 @@ CREATE TABLE t_material_table (
     file_type VARCHAR(10) NOT NULL,
     created_at INT NOT NULL,
     created_by VARCHAR(50) NOT NULL,
-    active TINYINT(1) NOT NULL
+    active TINYINT(1) NOT NULL,
+    url varchar(100) NOT NULL
 ) ENGINE = InnoDB;

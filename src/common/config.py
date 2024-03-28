@@ -1,6 +1,6 @@
 # Copyright (c) 2024 Guias Scouts
 
-# All rights reserved. This file and the source code it contains is
+# All rights reserved. This file and the media code it contains is
 # confidential and proprietary to Guias Scouts. No part of this
 # file may be reproduced, stored in a retrieval system, or transmitted
 # in any form or by any means, electronic, mechanical, photocopying,
@@ -30,12 +30,12 @@ class Config:
         self.DB_USERNAME = os.getenv('DB_USERNAME', 'root')
         self.DB_PASSWORD = os.getenv('DB_PASSWORD', 'tea')
         self.DB_DATABASE = os.getenv('DB_DATABASE', 'guias-scouts')
-        self.MINIO_URL = os.getenv('MINIO_URL', 'http://localhost:9000/')
+        self.MINIO_URL = os.getenv('MINIO_URL', 'http://localhost:9000')
         self.MC_ALIAS = os.getenv('MC_ALIAS', 'guias-scouts-materials')
         self.MC_BUCKET = os.getenv('MC_BUCKET', 'workspace-guias-scouts')
-        self.MC_ACCESS_KEY = os.getenv('MC_ACCESS_KEY', 'UGfK9Kd0lkWwgVS1Z8Td')
+        self.MC_ACCESS_KEY = os.getenv('MC_ACCESS_KEY', 'AZygNJDCYkMrFF14aArh')
         self.MC_SECRET_KEY = os.getenv(
-            'MC_SECRET_KEY', 'WLMOlIxXL3JDQqBX26eFxKbG0gqo5KsdfWYaE0hB')
+            'MC_SECRET_KEY', 'cqT0k4lHrQMagecDP6UMfUKcxlMQT0HQRbGaTYoi')
         self.MINIO_ENDPOINT = os.getenv(
             'MINIO_ENDPOINT', 'localhost:9000')
         self.MINIO_ACCESS_KEY = os.getenv(

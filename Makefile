@@ -31,7 +31,7 @@ run_dev:
 	cd src && python3 -m flask run
 
 start_dev_env:
-	docker-compose -f ./docker-compose.dev.yaml up -d
+	sudo systemctl stop mysql && docker-compose -f ./docker-compose.dev.yaml up -d
 
 destroy_dev_env:
 	docker-compose -f ./docker-compose.dev.yaml down

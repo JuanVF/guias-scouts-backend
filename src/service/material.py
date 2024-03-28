@@ -1,6 +1,6 @@
 # Copyright (c) 2024 Guias Scouts
 
-# All rights reserved. This file and the source code it contains is
+# All rights reserved. This file and the media code it contains is
 # confidential and proprietary to Guias Scouts. No part of this
 # file may be reproduced, stored in a retrieval system, or transmitted
 # in any form or by any means, electronic, mechanical, photocopying,
@@ -22,10 +22,15 @@
 
 from repository.material import add_material, delete_material_by_id, Material
 from repository.users import get_user_by_id, User
+import base64
+from common.mc import mc_handler
+from common.time import current_timestamp
+import os
 
 ERROR_USER_TYPE_MISMATCH = "ERROR_USER_TYPE_MISMATCH"
 ERROR_USER_DOES_NOT_EXISTS = "ERROR_USER_DOES_NOT_EXISTS"
 ERROR_MESSAGE = "ERROR_MESSAGE"
+
 
 def get_document_in_route(route: str) -> bytes:
     """
@@ -43,24 +48,40 @@ def get_document_in_route(route: str) -> bytes:
         return None
 
 
-def add_new_material(name: str, route: str):
+def add_new_material(title: str, file: str, extension: str, email: str):
     """
     Service that can add a new material
     """
 
-    document_content = get_document_in_route(route)
+    # El texto codificado en base64
+    encoded_data = file
 
-    if document_content is not None:
-        material = Material(material_id=None, title=name, document=document_content)
-        added = add_material(material)
-        if not added:
-            return ERROR_MESSAGE
-        else:
-            print("Material agregado")
-            return material
+    # Dividir la cadena por la coma y obtener la parte después de "base64"
+    _, base64_encoded_data = encoded_data.split(',', 1)
 
+    # Decodificar los datos base64
+    decoded_data = base64.b64decode(base64_encoded_data)
+
+    # Guardar los datos en un archivo
+
+    file_name = title.replace(" ", "_") + "." + extension  # Nombre del archivo donde deseas guardar los datos
+    with open("media/"+file_name, "wb") as file:
+        file.write(decoded_data)
+
+    print("Los datos se han guardado correctamente en el archivo:", file_name)
+
+    url = mc_handler.save_file(file_name)
+
+    material = Material("", title, file_name, extension, current_timestamp(), email, 1, url)
+
+    if url is None:
+        return ERROR_MESSAGE
     else:
-        print("No se pudo obtener el documento en la ruta especificada.")
+        add_material(material)
+        os.remove("media/"+file_name)
+
+
+        return True
 
 
 def remove_material(material_id: int, user_id: int):

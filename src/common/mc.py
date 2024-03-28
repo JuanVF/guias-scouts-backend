@@ -1,6 +1,6 @@
 # Copyright (c) 2024 Guias Scouts
 
-# All rights reserved. This file and the source code it contains is
+# All rights reserved. This file and the media code it contains is
 # confidential and proprietary to Guias Scouts. No part of this
 # file may be reproduced, stored in a retrieval system, or transmitted
 # in any form or by any means, electronic, mechanical, photocopying,
@@ -51,8 +51,11 @@ class MCHandler:
 
         to_execute = [self.mc_path] + args
 
+        print(to_execute)
+
         result = subprocess.run(
             to_execute, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        print(result.stderr)
 
         if result.returncode != 0:
             print(f"MCHandler-Error: Something wen't wrong {result.stderr}")
@@ -97,6 +100,7 @@ class MCHandler:
 
             if not succeed:
                 raise Exception("")
+            return f"{self.minio_url}/{self.bucket}/{filename}"
         except Exception as e:
             print(
                 f"MC-Error: an error ocurred while getting the saving the file '{filename}'")

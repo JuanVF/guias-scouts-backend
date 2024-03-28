@@ -1,6 +1,6 @@
 # Copyright (c) 2024 Guias Scouts
 
-# All rights reserved. This file and the source code it contains is
+# All rights reserved. This file and the media code it contains is
 # confidential and proprietary to Guias Scouts. No part of this
 # file may be reproduced, stored in a retrieval system, or transmitted
 # in any form or by any means, electronic, mechanical, photocopying,
@@ -23,7 +23,7 @@ from flask import Flask
 from controller.authentication import auth_blueprint
 from controller.health import health_blueprint
 from controller.user import user_blueprint
-from controller.media import media_blueprint
+from controller.material import material_blueprint
 from flasgger import Swagger
 from flask_cors import CORS
 
@@ -36,7 +36,8 @@ CORS(app)
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(health_blueprint)
 app.register_blueprint(user_blueprint)
-app.register_blueprint(media_blueprint)
+app.register_blueprint(material_blueprint)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

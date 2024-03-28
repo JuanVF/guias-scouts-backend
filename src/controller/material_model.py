@@ -1,6 +1,6 @@
 # Copyright (c) 2024 Guias Scouts
 
-# All rights reserved. This file and the source code it contains is
+# All rights reserved. This file and the media code it contains is
 # confidential and proprietary to Guias Scouts. No part of this
 # file may be reproduced, stored in a retrieval system, or transmitted
 # in any form or by any means, electronic, mechanical, photocopying,
@@ -24,6 +24,5 @@ from pydantic import BaseModel, validator
 
 class CreateMaterialModel(BaseModel):
     title: str
-    route: str
-
-
+    file: str
+    extension: str

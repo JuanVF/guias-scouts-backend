@@ -1,6 +1,6 @@
 # Copyright (c) 2024 Guias Scouts
 
-# All rights reserved. This file and the source code it contains is
+# All rights reserved. This file and the media code it contains is
 # confidential and proprietary to Guias Scouts. No part of this
 # file may be reproduced, stored in a retrieval system, or transmitted
 # in any form or by any means, electronic, mechanical, photocopying,
@@ -21,12 +21,26 @@
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from common.db import connection
 
-
 class Material:
-    def __init__(self, material_id, title, document, route):
+    def __init__(self, material_id, title, file_path, file_type, created_at, created_by, active, url):
         self.material_id = material_id
         self.title = title
-        self.document = document
+        self.file_path = file_path
+        self.file_type = file_type
+        self.created_at = created_at
+        self.created_by = created_by
+        self.active = active
+        self.url = url
+
+    def to_dict(self) -> dict:
+        return {
+            "material_id": self.material_id,
+            "title": self.title,
+            "file_type": self.file_type,
+            "created_at": self.created_at,
+            "created_by": self.created_by,
+            "url": self.url
+        }
 
 
 def add_material(material: Material):
@@ -34,14 +48,18 @@ def add_material(material: Material):
     Save the material to the database.
     """
     try:
-        params = (material.title, material.document, material.route,)
-        result = connection.execute_query("""INSERT INTO t_material_table
-            (title, document)
-            VALUES (%s, %s);""", params)
 
-        print("Material guardado")
-
+        params = (material.title, material.file_path, material.file_type, material.created_at, material.created_by,
+                  material.active, material.url, )
+        result = connection.execute_query("""INSERT INTO `guias-scouts`.t_materials_table
+            (title, file_path, file_type, created_at, created_by, active, url)
+                VALUES    
+            (%s, %s, %s, %s, %s, %s, %s);
+        
+        """, params)
         return True
+
+
     except Exception as error:
         print("Error guardando material:", error)
         return False
