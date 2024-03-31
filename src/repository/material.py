@@ -66,26 +66,31 @@ def add_material(material: Material):
         return False
 
 
-def search_materials(q: str) -> List[Material]:
+def search_materials(q: str):
     """
     Search over the materials
     """
     try:
         materials = []
 
-        params = (q, )
-        materials_data = connection.execute_read_query("""SELECT 
-                                                                id, title, file_path, file_type, created_at, created_by, active, url
-                                                            FROM `guias-scouts`.t_materials_table
-                                                            WHERE title LIKE CONCAT('%', COALESCE(NULLIF(%s,''), title), '%')
-                                                            AND active = 1;""", params)
+        # Ensure `q` is safely parameterized; `%s` is the placeholder for PyMySQL.
+        query = """
+        SELECT id, title, file_path, file_type, created_at, created_by, active, url
+        FROM `guias-scouts`.t_materials_table
+        WHERE title LIKE CONCAT('%%', COALESCE(NULLIF(%s,''), title), '%%')
+        AND active = 1;
+        """
+        params = (q, )  # Tuple with a single value for the parameter in the query.
+
+        materials_data = connection.execute_read_query(query, params)
 
         if materials_data and len(materials_data) > 0:
-            for i in range(0, len(materials_data)):
-                materials += [Material(*materials_data[i])]
+            for data in materials_data:
+                materials.append(Material(*data))
 
         return materials
-    except:
+    except Exception as err:
+        print(f"Error: {err}")
         return []
 
 
