@@ -22,9 +22,8 @@
 
 from repository.material import add_material, search_materials, Material, get_material_by_id, update_material_by_id
 import base64
-from common.mc import mc_handler
 from common.time import current_timestamp
-import os
+from common.config import config
 
 ERROR_MESSAGE = "ERROR_MESSAGE"
 SUCCESS_MESSAGE = "SUCCESS_MESSAGE"
@@ -84,10 +83,10 @@ def add_new_material(title: str, file: str, extension: str, email: str):
     # Nombre del archivo donde deseas guardar los datos
     file_name = title.replace(" ", "_") + "." + extension
 
-    with open("media/"+file_name, "wb") as file:
+    with open("static/"+file_name, "wb") as file:
         file.write(decoded_data)
 
-    url = mc_handler.save_file(file_name)
+    url = f"{config.SERVER_HOST}/static/{file_name}"
 
     material = Material("", title, file_name, extension,
                         current_timestamp(), email, 1, url)
@@ -96,7 +95,5 @@ def add_new_material(title: str, file: str, extension: str, email: str):
         return ERROR_MESSAGE
 
     add_material(material)
-
-    os.remove("media/"+file_name)
 
     return SUCCESS_MESSAGE
