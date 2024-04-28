@@ -19,33 +19,35 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from flask import Flask, send_from_directory
-from controller.authentication import auth_blueprint
-from controller.health import health_blueprint
-from controller.user import user_blueprint
-from controller.material import material_blueprint
-from controller.progress import progress_blueprint
-from flasgger import Swagger
-from flask_cors import CORS
+from common.db import connection
 
-app = Flask(__name__)
+class ProgressTypes:
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
 
-swagger = Swagger(app)
-CORS(app)
+    def to_dict(self) -> dict:
+        return {
+            "id" : self.id,
+            "name" : self.name
+        }
 
-# All routes
-app.register_blueprint(auth_blueprint)
-app.register_blueprint(health_blueprint)
-app.register_blueprint(user_blueprint)
-app.register_blueprint(material_blueprint)
-app.register_blueprint(progress_blueprint)
+def get_all_progress_types():
+    """
+    Query all the progress types
+    """
+    try:
+        result = []
+        params = ( )
+        data = connection.execute_read_query("""SELECT 
+                id, name
+            FROM 
+                `guias-scouts`.t_progress_type_table;""", params)
 
+        if data and len(data) > 0:
+            for i in range(0, len(data)):
+                result += [ProgressTypes(*data[i])]
 
-@app.route('/static/<filename>')
-def download_file(filename):
-    directory = app.static_folder  # Assuming file is in the static folder
-    return send_from_directory(directory, filename, as_attachment=True, download_name=filename)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+        return result
+    except:
+        return []

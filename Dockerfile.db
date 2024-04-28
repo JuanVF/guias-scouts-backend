@@ -27,3 +27,4 @@ COPY ./migrations/*.sql /docker-entrypoint-initdb.d/
 # Set environment variables
 ENV MYSQL_DATABASE=guias-scouts
 ENV MYSQL_ROOT_PASSWORD=tea
+ENV LANG=C.UTF-8

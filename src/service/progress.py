@@ -19,33 +19,23 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from flask import Flask, send_from_directory
-from controller.authentication import auth_blueprint
-from controller.health import health_blueprint
-from controller.user import user_blueprint
-from controller.material import material_blueprint
-from controller.progress import progress_blueprint
-from flasgger import Swagger
-from flask_cors import CORS
 
-app = Flask(__name__)
+from repository.progress import get_all_progress_types as repo_get_all_progress_types
 
-swagger = Swagger(app)
-CORS(app)
+def get_all_progress_types() -> list[dict]:
+    """
+    Service that can get all the progress types
+    """
+    progress_types = repo_get_all_progress_types()
 
-# All routes
-app.register_blueprint(auth_blueprint)
-app.register_blueprint(health_blueprint)
-app.register_blueprint(user_blueprint)
-app.register_blueprint(material_blueprint)
-app.register_blueprint(progress_blueprint)
+    if len(progress_types) <= 0:
+        return progress_types
 
+    results = []
 
-@app.route('/static/<filename>')
-def download_file(filename):
-    directory = app.static_folder  # Assuming file is in the static folder
-    return send_from_directory(directory, filename, as_attachment=True, download_name=filename)
+    for i in range(0, len(progress_types)):
+        type = progress_types[i]
 
+        results += [type.to_dict()]
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    return results

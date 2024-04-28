@@ -25,6 +25,8 @@ USE `guias-scouts`;
 SET
     GLOBAL default_table_encryption = ON;
 
+ALTER DATABASE `guias-scouts` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 CREATE TABLE t_patrols_table (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(40)
