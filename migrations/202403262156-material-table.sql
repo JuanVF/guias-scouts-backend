@@ -24,11 +24,11 @@ USE `guias-scouts`;
 
 CREATE TABLE t_materials_table (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(40) NOT NULL,
+    title NVARCHAR(40) NOT NULL,
     file_path VARCHAR(200) NOT NULL,
     file_type VARCHAR(10) NOT NULL,
     created_at INT NOT NULL,
     created_by VARCHAR(50) NOT NULL,
     active TINYINT(1) NOT NULL,
     url varchar(100) NOT NULL
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;

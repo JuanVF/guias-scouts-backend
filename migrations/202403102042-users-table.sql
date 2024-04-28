@@ -24,7 +24,7 @@ USE `guias-scouts`;
 
 CREATE TABLE t_users_table (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    fullname VARCHAR(100) NOT NULL,
+    fullname NVARCHAR(100) NOT NULL,
     id_patrol INT,
     email VARCHAR(120) NOT NULL,
     birthday INT NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE t_users_table (
     id_role INT NOT NULL,
     FOREIGN KEY (id_patrol) REFERENCES t_patrols_table(id),
     FOREIGN KEY (id_role) REFERENCES t_roles_table(id)
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 INSERT INTO
     t_users_table (
