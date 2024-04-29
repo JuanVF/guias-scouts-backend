@@ -23,6 +23,7 @@
 import random
 import string
 
+generate_password = lambda length: ''.join(random.choice("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?") for i in range(length))
 
 def generate_confirmation_code():
     """

@@ -25,7 +25,7 @@ from repository.codes import insert_code_by_user_id
 from common.crypto import sha3_512_string
 from common.config import config
 from common.time import current_timestamp
-from common.text import generate_confirmation_code
+from common.text import generate_confirmation_code, generate_password
 from email.message import EmailMessage
 import ssl
 import smtplib
@@ -58,6 +58,47 @@ def change_password(email: str, prevPassword: str, newPassword: str) -> str:
 
     return ""
 
+def send_change_password(email_receiver, new_password):
+    email_sender = config.SENDER_EMAIL
+    password = config.SENDER_EMAIL_PASSWORD
+
+    subject = "Cambio Contraseña - Guías Scouts"
+    body = "Un administrador ha cambiado tu contraseña {}".format(new_password)
+
+    email = EmailMessage()
+    email["From"] = email_sender
+    email["To"] = email_receiver
+    email["Subject"] = subject
+    email.set_content(body)
+
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
+        smtp.login(email_sender, password)
+        smtp.sendmail(email_sender, email_receiver, email.as_string())
+
+def reestablish_user_password_by_email(email: str):
+    """
+    Service that can change the user password. Return empty string if everything is right
+    """
+    user = get_user_by_email(email)
+
+    if not user:
+        return ERROR_USER_DOES_NOT_EXISTS
+    
+    password = generate_password(12)
+    hashed_password = sha3_512_string(password)
+
+    user.password = hashed_password
+
+    updated = update_user_by_id(user)
+
+    if not updated:
+        return ERROR_MESSAGE
+    
+    send_change_password(email, password)
+
+    return ""
 
 def get_user(user_id: str) -> dict:
     """
@@ -105,7 +146,6 @@ def send_confirmation_code(email_receiver, confirmation_code):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
         smtp.login(email_sender, password)
         smtp.sendmail(email_sender, email_receiver, email.as_string())
-
 
 def create_user(fullname: str, email: str, password: str, birthday: str, id_patrol: int, id_role: int):
     """

@@ -26,7 +26,9 @@ from controller.authorization_middleware import extract_jwt_token
 
 from common.response import get_response
 
-from service.progress import get_all_progress_types
+from service.progress import get_all_progress_types, get_questions_by_progress_type_and_user_id
+
+from repository.users import DIRIGENTE_ROLE
 
 
 progress_blueprint = Blueprint('progress', __name__, url_prefix='/progress')
@@ -43,28 +45,9 @@ def get_get_all_progress_types(decoded_token):
       - user
     consumes:
       - application/json
-    parameters:
-      - in: body
-        name: body
-        description: User's password data
-        required: true
-        schema:
-          type: object
-          required:
-            - prevPassword
-            - newPassword
-          properties:
-            prevPassword:
-              type: string
-              format: password
-              example: your_old_password
-            newPassword:
-              type: string
-              format: password
-              example: your_new_password
     responses:
       200:
-        description: Password Changed successfully
+        description: Return all progress types
         schema:
           type: object
           properties:
@@ -74,11 +57,54 @@ def get_get_all_progress_types(decoded_token):
               example: OK
       400:
         description: Invalid Body
-      401:
-        description: Invalid Code
     """
     try:
         result = get_all_progress_types()
+
+        return get_response(200, {"message": "OK", "body" : result })
+    except Exception as error:
+        print(error)
+        return get_response(400, {"message": "Invalid Body"})
+    
+  
+
+
+@progress_blueprint.route("/questions", methods=['GET'])
+@is_json_content_type()
+@extract_jwt_token()
+def get_filter_questions(decoded_token):
+    """
+    Allows an user to request all the progress types
+    ---
+    tags:
+      - user
+    consumes:
+      - application/json
+    responses:
+      200:
+        description: Return all progress types
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: Response Message
+              example: OK
+      400:
+        description: Invalid Body
+    """
+    # Only admins can read other user forms
+    if decoded_token['role'] != DIRIGENTE_ROLE:
+        return get_response(401, {"message": "Not enough privileges..."})
+
+    try:
+        progress_type = request.args.get('progressType', None)
+        user_id = request.args.get('userId', None)
+
+        if progress_type == None or user_id == None:
+            raise Exception("progressType or userId are required parameters")
+
+        result = get_questions_by_progress_type_and_user_id(progress_type, user_id)
 
         return get_response(200, {"message": "OK", "body" : result })
     except Exception as error:

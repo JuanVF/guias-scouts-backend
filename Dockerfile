@@ -23,9 +23,6 @@ FROM alpine:3.19.1
 
 # Install all packages
 RUN apk add --update python3 py3-pip curl
-RUN curl -O https://dl.min.io/client/mc/release/linux-amd64/mc && \
-    chmod +x mc && \
-    mv mc /usr/local/bin/
 
 # Set the workdir
 WORKDIR /app

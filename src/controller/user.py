@@ -26,7 +26,7 @@ from controller.authorization_middleware import extract_jwt_token
 
 from common.response import get_response
 
-from service.users import change_password as service_change_password
+from service.users import change_password as service_change_password, reestablish_user_password_by_email
 from service.users import create_user, get_user
 from service.users import ERROR_MESSAGE, ERROR_PASSWORD_MISMATCH, ERROR_USER_DOES_NOT_EXISTS
 
@@ -209,3 +209,53 @@ def register_user(decoded_token):
         return get_response(200, {"message": "OK"})
     except Exception as e:
         return get_response(400, {"message": f"Invalid Body {e}"})
+
+
+@user_blueprint.route("/reestablish-password", methods=['GET'])
+@extract_jwt_token()
+def reestablish_password(decoded_token):
+    """
+    Get User Profile Endpoint, retrieves user information.
+    ---
+    tags:
+      - user
+    responses:
+      200:
+        description: Successful operation
+        schema:
+          type: object
+          properties:
+            user:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                email:
+                  type: string
+                birthday:
+                  type: number
+                  format: epoch_time
+                patrol_name:
+                  type: string
+                role_name:
+                  type: string
+      404:
+        description: User not found
+      500:
+        description: An error occurred while fetching user profile
+    """
+    if decoded_token['role'] != DIRIGENTE_ROLE:
+        return get_response(401, {"message": "Not enough privileges..."})
+    
+    try:
+        email = request.args.get('email', None)
+
+        result = reestablish_user_password_by_email(email)
+
+        if result != "":
+            raise Exception("ERROR")
+
+        return get_response(200, {"message": "OK"})
+    except Exception as e:
+        print(e)
+        return get_response(500, {"message": "An error ocurred while trying to reestablish the password"})

@@ -8,13 +8,11 @@ This repository contains the backend for the Guías Scouts project, an integral 
 
 > Docker
 
-> MinIO client (mc)
-
 ## Getting Started
 
 ### Prerequisites
 
-Ensure Docker is installed and running on your machine. Additionally, the MinIO client (mc) should be installed for managing files within the project.
+Ensure Docker is installed and running on your machine.
 
 ### Running the Project
 
@@ -60,7 +58,7 @@ To build the database image with a specific tag:
 
 ## Project Structure
 
-The backend is built with a focus on security, efficiency, and maintainability. It utilizes Docker for containerization, ensuring a consistent and isolated environment for development and production. The MinIO client (mc) is used for file management, adhering to the project's requirements for handling educational materials and user data securely.
+The backend is built with a focus on security, efficiency, and maintainability. It utilizes Docker for containerization, ensuring a consistent and isolated environment for development and production.
 
 ## Licenses
 

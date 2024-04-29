@@ -32,6 +32,27 @@ class ProgressTypes:
             "name" : self.name
         }
 
+class ProgressQuestion:
+    def __init__(self, id, question, question_type_id, question_type, progress_type_id, progress_type, user_answer):
+        self.id = id
+        self.question = question
+        self.question_type_id = question_type_id
+        self.question_type = question_type
+        self.progress_type_id = progress_type_id
+        self.progress_type = progress_type
+        self.user_answer = user_answer
+
+    def to_dict(self) -> dict:
+        return {
+            "id" : self.id,
+            "question" : self.question,
+            "question_type" : self.question_type,
+            "question_type_id" : self.question_type_id,
+            "progress_type" : self.progress_type,
+            "progress_type_id" : self.progress_type_id,
+            "user_answer" : self.user_answer,
+        }
+    
 def get_all_progress_types():
     """
     Query all the progress types
@@ -47,6 +68,35 @@ def get_all_progress_types():
         if data and len(data) > 0:
             for i in range(0, len(data)):
                 result += [ProgressTypes(*data[i])]
+
+        return result
+    except:
+        return []
+
+def get_questions_by_progress_type_and_user_id(type : str, user_id : int):
+    """
+    Filter questions by the progress type
+    """
+    try:
+        result = []
+        params = (user_id, type, )
+        data = connection.execute_read_query("""SELECT 
+                    pq.id,
+                    pq.question,
+                    qt.id AS question_id,
+                    qt.name AS question_type,
+                    pt.id AS progress_id,
+                    pt.name AS progress_type,
+                    COALESCE(pp.user_id IS NOT NULL, FALSE) AS user_answer
+                FROM `guias-scouts`.t_progress_questions_table pq
+                INNER JOIN `guias-scouts`.t_question_type_table qt ON pq.id_question_type = qt.id
+                INNER JOIN `guias-scouts`.t_progress_type_table pt ON pq.id_progress_type = pt.id
+                LEFT JOIN `guias-scouts`.t_protagonist_progress_table pp ON pq.id = pp.question_id AND pp.user_id = %s
+                WHERE pt.name = %s;""", params)
+
+        if data and len(data) > 0:
+            for i in range(0, len(data)):
+                result += [ProgressQuestion(*data[i])]
 
         return result
     except:

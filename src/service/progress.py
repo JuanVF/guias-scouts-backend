@@ -21,6 +21,7 @@
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 
 from repository.progress import get_all_progress_types as repo_get_all_progress_types
+from repository.progress import get_questions_by_progress_type_and_user_id as repo_get_questions_by_progress_type_and_user_id
 
 def get_all_progress_types() -> list[dict]:
     """
@@ -37,5 +38,23 @@ def get_all_progress_types() -> list[dict]:
         type = progress_types[i]
 
         results += [type.to_dict()]
+
+    return results
+
+def get_questions_by_progress_type_and_user_id(type: str, user_id : int) -> list[dict]:
+    """
+    Service that can filter questions by progress types and user id
+    """
+    questions = repo_get_questions_by_progress_type_and_user_id (type, user_id)
+
+    if len(questions) <= 0:
+        return questions
+
+    results = []
+
+    for i in range(0, len(questions)):
+        question = questions[i]
+
+        results += [question.to_dict()]
 
     return results
