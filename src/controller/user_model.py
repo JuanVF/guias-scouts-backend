@@ -34,3 +34,11 @@ class RegisterUserBody(BaseModel):
     birthday: int
     id_patrol: int
     id_role: int
+
+class UpdateUserBody(BaseModel):
+    id : int
+    fullname: str
+    email: str
+    birthday: int
+    id_patrol: int
+    id_role: int

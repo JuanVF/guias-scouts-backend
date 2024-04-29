@@ -182,6 +182,34 @@ def create_user(fullname: str, email: str, password: str, birthday: str, id_patr
         print("Error creating user:", e)
         return None
 
+def update_user(id : int, fullname: str, email: str, birthday: str, id_patrol: int, id_role: int):
+    """
+    Updates a new user and generate confirmation code.
+    """
+    try:
+        existing_user = get_user_by_id(id)
+
+        if not existing_user:
+            return ERROR_MESSAGE
+        
+        existing_user.fullname = fullname
+        existing_user.email = email
+        existing_user.birthday = birthday
+        existing_user.id_patrol = id_patrol
+        existing_user.id_role = id_role
+
+        # Guardar el usuario en la base de datos
+        updated = update_user_by_id(existing_user)
+
+        if not updated:
+            return ERROR_MESSAGE
+
+        return ""
+    except Exception as e:
+        # Manejar cualquier error que pueda ocurrir al crear el usuario
+        print("Error creating user:", e)
+        return None
+
 
 def forgot_password(email: str):
     """

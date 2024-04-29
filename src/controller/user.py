@@ -27,12 +27,12 @@ from controller.authorization_middleware import extract_jwt_token
 from common.response import get_response
 
 from service.users import change_password as service_change_password, reestablish_user_password_by_email
-from service.users import create_user, get_user
+from service.users import create_user, get_user, update_user
 from service.users import ERROR_MESSAGE, ERROR_PASSWORD_MISMATCH, ERROR_USER_DOES_NOT_EXISTS
 
 from repository.users import DIRIGENTE_ROLE
 
-from controller.user_model import ChangePasswordBody, RegisterUserBody
+from controller.user_model import ChangePasswordBody, RegisterUserBody, UpdateUserBody
 
 
 user_blueprint = Blueprint('user', __name__, url_prefix='/user')
@@ -210,6 +210,70 @@ def register_user(decoded_token):
     except Exception as e:
         return get_response(400, {"message": f"Invalid Body {e}"})
 
+
+@user_blueprint.route("/update-user", methods=['PUT'])
+@is_json_content_type()
+@extract_jwt_token()
+def update_existing_user(decoded_token):
+    """
+    Register User Endpoint, updates an active user account.
+    ---
+    tags:
+      - user
+    parameters:
+      - in: body
+        name: user
+        description: User to be registered
+        required: true
+        schema:
+          type: object
+          required:
+            - id
+            - fullname
+            - email
+            - password
+            - birthday
+            - id_patrol
+            - id_role
+          properties:
+            id:
+              type: number
+            fullname:
+              type: string
+            email:
+              type: string
+            birthday:
+              type: number
+              format: epoch_time
+            id_patrol:
+              type: integer
+            id_role:
+              type: integer
+    responses:
+      200:
+        description: User successfully registered
+      400:
+        description: Invalid request body
+      401:
+        description: Not enough privileges
+      500:
+        description: An error occurred while registering the user
+    """
+    # Only admins can create users
+    if decoded_token['role'] != DIRIGENTE_ROLE:
+        return get_response(401, {"message": "Not enough privileges..."})
+
+    try:
+        body = UpdateUserBody(**request.json)
+
+        updated = update_user(body.id, body.fullname, body.email, body.birthday, body.id_patrol, body.id_role)
+
+        if updated != "":
+            raise Exception("user does not exists...")
+
+        return get_response(200, {"message": "OK"})
+    except Exception as e:
+        return get_response(400, {"message": f"Invalid Body {e}"})
 
 @user_blueprint.route("/reestablish-password", methods=['GET'])
 @extract_jwt_token()
