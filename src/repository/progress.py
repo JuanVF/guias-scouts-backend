@@ -21,6 +21,7 @@
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 from common.db import connection
 
+
 class ProgressTypes:
     def __init__(self, id, name):
         self.id = id
@@ -28,9 +29,10 @@ class ProgressTypes:
 
     def to_dict(self) -> dict:
         return {
-            "id" : self.id,
-            "name" : self.name
+            "id": self.id,
+            "name": self.name
         }
+
 
 class ProgressQuestion:
     def __init__(self, id, question, question_type_id, question_type, progress_type_id, progress_type, user_answer):
@@ -44,22 +46,23 @@ class ProgressQuestion:
 
     def to_dict(self) -> dict:
         return {
-            "id" : self.id,
-            "question" : self.question,
-            "question_type" : self.question_type,
-            "question_type_id" : self.question_type_id,
-            "progress_type" : self.progress_type,
-            "progress_type_id" : self.progress_type_id,
-            "user_answer" : self.user_answer,
+            "id": self.id,
+            "question": self.question,
+            "question_type": self.question_type,
+            "question_type_id": self.question_type_id,
+            "progress_type": self.progress_type,
+            "progress_type_id": self.progress_type_id,
+            "user_answer": self.user_answer,
         }
-    
+
+
 def get_all_progress_types():
     """
     Query all the progress types
     """
     try:
         result = []
-        params = ( )
+        params = ()
         data = connection.execute_read_query("""SELECT 
                 id, name
             FROM 
@@ -73,7 +76,8 @@ def get_all_progress_types():
     except:
         return []
 
-def get_questions_by_progress_type_and_user_id(type : str, user_id : int):
+
+def get_questions_by_progress_type_and_user_id(type: str, user_id: int):
     """
     Filter questions by the progress type
     """
@@ -101,3 +105,28 @@ def get_questions_by_progress_type_and_user_id(type : str, user_id : int):
         return result
     except:
         return []
+
+
+def insert_user_answers(user_id: int, answered_questions: list[ProgressQuestion]):
+    """
+    Insert user answers into the database
+    """
+    try:
+        for question in answered_questions:
+            if question.user_answer == 1:
+                params = (question.id, user_id)
+                connection.execute_query("""INSERT INTO 
+                        `guias-scouts`.t_protagonist_progress_table (question_id, user_id)
+                    VALUES 
+                        (%s, %s);""", params)
+            else:
+                connection.execute_query("""DELETE FROM 
+                        `guias-scouts`.t_protagonist_progress_table 
+                    WHERE 
+                        question_id = %s AND user_id = %s;""", (question.id, user_id))
+
+        return True
+    except Exception as e:
+        print("Error inserting user answers:", e)
+
+        return False

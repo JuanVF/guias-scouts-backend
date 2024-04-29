@@ -22,6 +22,9 @@
 
 from repository.progress import get_all_progress_types as repo_get_all_progress_types
 from repository.progress import get_questions_by_progress_type_and_user_id as repo_get_questions_by_progress_type_and_user_id
+from repository.progress import insert_user_answers
+from repository.progress import ProgressQuestion
+
 
 def get_all_progress_types() -> list[dict]:
     """
@@ -41,20 +44,38 @@ def get_all_progress_types() -> list[dict]:
 
     return results
 
-def get_questions_by_progress_type_and_user_id(type: str, user_id : int) -> list[dict]:
+
+def get_questions_by_progress_type_and_user_id(type: str, user_id: int) -> list[dict]:
     """
     Service that can filter questions by progress types and user id
     """
-    questions = repo_get_questions_by_progress_type_and_user_id (type, user_id)
+    questions = repo_get_questions_by_progress_type_and_user_id(type, user_id)
 
     if len(questions) <= 0:
         return questions
 
     results = []
+    mapped = {}
 
     for i in range(0, len(questions)):
         question = questions[i]
 
-        results += [question.to_dict()]
+        if question.id not in mapped:
+            mapped[question.id] = True
+
+            results += [question.to_dict()]
 
     return results
+
+
+def evaluate_form(questions: list, user_id: int):
+    """
+    Evaluate a form
+    """
+    parsed_questions = []
+
+    for question in questions:
+        parsed_questions += [ProgressQuestion(
+            question.id, question.question, question.question_type_id, question.question_type, question.progress_type_id, question.progress_type, question.user_answer)]
+
+    return insert_user_answers(user_id, parsed_questions)
