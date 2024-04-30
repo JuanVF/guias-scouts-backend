@@ -61,7 +61,7 @@ def get_get_all_progress_types(decoded_token):
     try:
         result = get_all_progress_types()
 
-        return get_response(200, {"message": "OK", "body": result})
+        return get_response(200, {"message": "OK", "types": result})
     except Exception as error:
         print(error)
         return get_response(400, {"message": "Invalid Body"})
