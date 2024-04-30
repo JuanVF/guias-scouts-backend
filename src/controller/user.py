@@ -26,7 +26,7 @@ from controller.authorization_middleware import extract_jwt_token
 
 from common.response import get_response
 
-from service.users import change_password as service_change_password, reestablish_user_password_by_email
+from service.users import change_password as service_change_password, reestablish_user_password_by_email, get_all_active_users
 from service.users import create_user, get_user, update_user
 from service.users import ERROR_MESSAGE, ERROR_PASSWORD_MISMATCH, ERROR_USER_DOES_NOT_EXISTS
 
@@ -149,6 +149,51 @@ def get_profile(decoded_token):
         return get_response(500, {"message": "An error occurred while fetching user profile"})
 
 
+@user_blueprint.route("/get-all", methods=['GET'])
+@extract_jwt_token()
+def method_get_all_users(decoded_token):
+    """
+    Get User Profile Endpoint, retrieves user information.
+    ---
+    tags:
+      - user
+    responses:
+      200:
+        description: Successful operation
+        schema:
+          type: object
+          properties:
+            user:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                email:
+                  type: string
+                birthday:
+                  type: number
+                  format: epoch_time
+                patrol_name:
+                  type: string
+                role_name:
+                  type: string
+      404:
+        description: User not found
+      500:
+        description: An error occurred while fetching user profile
+    """
+    # Only admins can read all users
+    if decoded_token['role'] != DIRIGENTE_ROLE:
+        return get_response(401, {"message": "Not enough privileges..."})
+
+    try:
+        users = get_all_active_users()
+
+        return get_response(200, {"users": users})
+    except Exception as e:
+        return get_response(500, {"message": "An error occurred while fetching user profile"})
+
+
 @user_blueprint.route("/register-user", methods=['POST'])
 @is_json_content_type()
 @extract_jwt_token()
@@ -266,7 +311,8 @@ def update_existing_user(decoded_token):
     try:
         body = UpdateUserBody(**request.json)
 
-        updated = update_user(body.id, body.fullname, body.email, body.birthday, body.id_patrol, body.id_role)
+        updated = update_user(body.id, body.fullname, body.email,
+                              body.birthday, body.id_patrol, body.id_role)
 
         if updated != "":
             raise Exception("user does not exists...")
@@ -274,6 +320,7 @@ def update_existing_user(decoded_token):
         return get_response(200, {"message": "OK"})
     except Exception as e:
         return get_response(400, {"message": f"Invalid Body {e}"})
+
 
 @user_blueprint.route("/reestablish-password", methods=['GET'])
 @extract_jwt_token()
@@ -310,7 +357,7 @@ def reestablish_password(decoded_token):
     """
     if decoded_token['role'] != DIRIGENTE_ROLE:
         return get_response(401, {"message": "Not enough privileges..."})
-    
+
     try:
         email = request.args.get('email', None)
 

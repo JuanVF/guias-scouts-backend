@@ -20,7 +20,7 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 
-from repository.users import get_user_by_email, update_user_by_id, save_user, User, get_user_by_id
+from repository.users import get_user_by_email, update_user_by_id, save_user, User, get_user_by_id, get_all_users
 from repository.codes import insert_code_by_user_id
 from common.crypto import sha3_512_string
 from common.config import config
@@ -58,6 +58,7 @@ def change_password(email: str, prevPassword: str, newPassword: str) -> str:
 
     return ""
 
+
 def send_change_password(email_receiver, new_password):
     email_sender = config.SENDER_EMAIL
     password = config.SENDER_EMAIL_PASSWORD
@@ -77,6 +78,7 @@ def send_change_password(email_receiver, new_password):
         smtp.login(email_sender, password)
         smtp.sendmail(email_sender, email_receiver, email.as_string())
 
+
 def reestablish_user_password_by_email(email: str):
     """
     Service that can change the user password. Return empty string if everything is right
@@ -85,7 +87,7 @@ def reestablish_user_password_by_email(email: str):
 
     if not user:
         return ERROR_USER_DOES_NOT_EXISTS
-    
+
     password = generate_password(12)
     hashed_password = sha3_512_string(password)
 
@@ -95,10 +97,11 @@ def reestablish_user_password_by_email(email: str):
 
     if not updated:
         return ERROR_MESSAGE
-    
+
     send_change_password(email, password)
 
     return ""
+
 
 def get_user(user_id: str) -> dict:
     """
@@ -126,6 +129,13 @@ def get_user(user_id: str) -> dict:
     }
 
 
+def get_all_active_users() -> list[dict]:
+    """
+    Service that can get the user information by its id
+    """
+    return get_all_users()
+
+
 def send_confirmation_code(email_receiver, confirmation_code):
 
     email_sender = config.SENDER_EMAIL
@@ -146,6 +156,7 @@ def send_confirmation_code(email_receiver, confirmation_code):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
         smtp.login(email_sender, password)
         smtp.sendmail(email_sender, email_receiver, email.as_string())
+
 
 def create_user(fullname: str, email: str, password: str, birthday: str, id_patrol: int, id_role: int):
     """
@@ -182,7 +193,8 @@ def create_user(fullname: str, email: str, password: str, birthday: str, id_patr
         print("Error creating user:", e)
         return None
 
-def update_user(id : int, fullname: str, email: str, birthday: str, id_patrol: int, id_role: int):
+
+def update_user(id: int, fullname: str, email: str, birthday: str, id_patrol: int, id_role: int):
     """
     Updates a new user and generate confirmation code.
     """
@@ -191,7 +203,7 @@ def update_user(id : int, fullname: str, email: str, birthday: str, id_patrol: i
 
         if not existing_user:
             return ERROR_MESSAGE
-        
+
         existing_user.fullname = fullname
         existing_user.email = email
         existing_user.birthday = birthday
