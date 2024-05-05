@@ -137,6 +137,7 @@ def get_user_by_id(user_id: int):
     """
     try:
         params = (user_id, )
+
         user_data = connection.execute_read_query("""SELECT 
                 u.id AS user_id,
                 u.fullname AS user_fullname,

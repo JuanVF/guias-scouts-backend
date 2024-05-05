@@ -92,12 +92,16 @@ def get_filter_questions(decoded_token):
         description: Invalid Body
     """
     # Only admins can read other user forms
-    if decoded_token['role'] != DIRIGENTE_ROLE:
-        return get_response(401, {"message": "Not enough privileges..."})
+    user_id = request.args.get('userId', None)
+
+    if user_id == None:
+        return get_response(401, {"message": "\"user_id\" param is missing..."})
+
+    if str(decoded_token['user_id']) != str(user_id) and decoded_token['role'] != DIRIGENTE_ROLE:
+        return get_response(401, {"message": "Not enough privileges to read other users questions..."})
 
     try:
         progress_type = request.args.get('progressType', None)
-        user_id = request.args.get('userId', None)
 
         if progress_type == None or user_id == None:
             raise Exception("progressType or userId are required parameters")
