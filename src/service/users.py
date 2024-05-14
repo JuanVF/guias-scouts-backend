@@ -20,7 +20,7 @@
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
 
-from repository.users import get_user_by_email, update_user_by_id, save_user, User, get_user_by_id, get_all_users
+from repository.users import get_user_by_email, update_user_by_id, save_user, User, get_user_by_id, get_all_users, get_all_users_by_patrol
 from repository.codes import insert_code_by_user_id
 from common.crypto import sha3_512_string
 from common.config import config
@@ -131,9 +131,16 @@ def get_user(user_id: str) -> dict:
 
 def get_all_active_users() -> list[dict]:
     """
-    Service that can get the user information by its id
+    Service that can get all the users
     """
     return get_all_users()
+
+
+def get_all_active_users_by_patrol(patrol: str) -> list[dict]:
+    """
+    Service that can get the user information by its patrol group
+    """
+    return get_all_users_by_patrol(patrol)
 
 
 def send_confirmation_code(email_receiver, confirmation_code):

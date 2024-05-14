@@ -104,7 +104,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\" : \"natsukawaii5@gmail.com\",\r\n    \"code\" : \"SUK942\"\r\n}",
+							"raw": "{\r\n    \"email\" : \"androidapps0703@gmail.com\",\r\n    \"code\" : \"OEZ388\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -206,7 +206,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"fullname\": \"Juan Vargas\",\n    \"email\": \"natsukawaii5@gmail.com\",\n    \"password\": \"1234\",\n    \"birthday\": 983923200,\n    \"id_patrol\": 1,\n    \"id_role\" : 1\n}",
+							"raw": "{\n    \"fullname\": \"Juan No Admin de verdad\",\n    \"email\": \"androidapps0703@gmail.com\",\n    \"password\": \"1234\",\n    \"birthday\": 983923200,\n    \"id_patrol\": 1,\n    \"id_role\" : 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -282,6 +282,105 @@
 								{
 									"key": "email",
 									"value": "natsukawaii5@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\" : 3,\n    \"fullname\": \"Juan No Admin\",\n    \"email\": \"juanvfletes@gmail.com\",\n    \"birthday\": 983923200,\n    \"id_patrol\": 1,\n    \"id_role\" : 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/update-user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"update-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/get-all",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users By Patrol",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/get-all-by-patrol?patrol=Lobos",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"get-all-by-patrol"
+							],
+							"query": [
+								{
+									"key": "patrol",
+									"value": "Lobos"
 								}
 							]
 						}
@@ -463,7 +562,7 @@
 					"response": []
 				},
 				{
-					"name": "Get All Progress Types Copy",
+					"name": "Get All Questions by Progress Type and User Id",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -501,6 +600,49 @@
 									"key": "userId",
 									"value": "1"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Evaluate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 1,\r\n    \"questions\": [\r\n        {\r\n            \"id\": 1,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Te has preguntado ¿Qué es el Escultismo y el Guidismo? Investiga para responder a esta pregunta\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explique cómo se conforma el Grupo Guía y Scout\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 1\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Aprende y demuestra que vives el sentido de la Ley y de la Promesa Guía y Scout\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 1\r\n        },\r\n        {\r\n            \"id\": 4,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Aprende el significado de la seña scouts\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 5,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Aprende la Oración Guía y Scout\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 6,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Aprende y demuestra que vives las Virtudes y los Principios Guías y Scout\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 7,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Pídele a tu Guía de Patrulla que explique la historia de la Patrulla y de cómo funciona el Sistema de Patrulla\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 8,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Narra la historia de la Asociación Guías y Scout de Costa Rica\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 9,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Narra brevemente la historia del Movimiento\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 10,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Narra el origen del apretón de manos scout\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 11,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Aprende la seña Guía y Scout\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 12,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explica que es Lady Olave Saint-Clare Soames\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 13,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explica que son los Centros Mundiales Guías y cuáles son\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 14,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explique que es la Conferencia Scout Mundial y Boureau Scout Mundial\",\r\n            \"question_type\": \"Guidismo y Escultismo\",\r\n            \"question_type_id\": 1,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 15,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Te Reto a realizar un cuadro de nudos y tipos de mecates\",\r\n            \"question_type\": \"Cabuyería\",\r\n            \"question_type_id\": 2,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 16,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes aplicar los nudos de Riso y Arnés de hombre\",\r\n            \"question_type\": \"Cabuyería\",\r\n            \"question_type_id\": 2,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 17,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demostrar que sabes aplicar los siguientes nudos: vuelta escota simple, media llave, dos cotes y pescador\",\r\n            \"question_type\": \"Cabuyería\",\r\n            \"question_type_id\": 2,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 18,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes aplicar los nudos de Margarita y el as de guía simple\",\r\n            \"question_type\": \"Cabuyería\",\r\n            \"question_type_id\": 2,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 19,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"¿Por qué no investigas cuáles son las claves de números y letras? Las aprendes y te inventas una para tu patrulla\",\r\n            \"question_type\": \"Códigos y Claves\",\r\n            \"question_type_id\": 3,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 20,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes utilizar las siguientes claves: Murciélago, abuelito y gato\",\r\n            \"question_type\": \"Códigos y Claves\",\r\n            \"question_type_id\": 3,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 21,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes utilizar la clave Hipotenusa\",\r\n            \"question_type\": \"Códigos y Claves\",\r\n            \"question_type_id\": 3,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 22,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Has encendido fuegos… los has apagado… Te reto a hacerlo, aprende las precauciones de seguridad, practícalo. Luego enséñaselo a tu Patrulla\",\r\n            \"question_type\": \"Fuegos y Fogones\",\r\n            \"question_type_id\": 4,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 23,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explicar qué elementos se requieren para el encendido del fuego\",\r\n            \"question_type\": \"Fuegos y Fogones\",\r\n            \"question_type_id\": 4,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 24,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes encender el fuego utilizando yesca, astilla y combustibles\",\r\n            \"question_type\": \"Fuegos y Fogones\",\r\n            \"question_type_id\": 4,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 25,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Conversa con tu Guía de Patrulla sobre las Normas de seguridad\",\r\n            \"question_type\": \"Fuegos y Fogones\",\r\n            \"question_type_id\": 4,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 26,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explica los usos que se le dan al fuego Tipi o Pirámide\",\r\n            \"question_type\": \"Fuegos y Fogones\",\r\n            \"question_type_id\": 4,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 27,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes encender un fuego de Tipi o pirámide con las precauciones de seguridad\",\r\n            \"question_type\": \"Fuegos y Fogones\",\r\n            \"question_type_id\": 4,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 28,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Antes que uses una herramienta debes saber las normas de seguridad, investiga… y aprende las normas de seguridad para el uso de las herramientas\",\r\n            \"question_type\": \"Herramientas\",\r\n            \"question_type_id\": 5,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 29,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explícale a un miembro de tu patrulla cuáles son las normas de seguridad para utilizar herramientas\",\r\n            \"question_type\": \"Herramientas\",\r\n            \"question_type_id\": 5,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 30,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra cuáles son los usos correctos de la linterna\",\r\n            \"question_type\": \"Herramientas\",\r\n            \"question_type_id\": 5,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 31,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes utilizar una linterna de manera correcta\",\r\n            \"question_type\": \"Herramientas\",\r\n            \"question_type_id\": 5,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 32,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Conversa con tu Guías de Patrulla sobre las Normas de seguridad para el uso de las herramientas\",\r\n            \"question_type\": \"Herramientas\",\r\n            \"question_type_id\": 5,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Pídele a tu Guía de Patrulla la lista de artículos que debes llevar a una excursión y luego, que te ayude a revisar la forma en la que has acomodado tu mochila\",\r\n            \"question_type\": \"Campismo y Aire Libre\",\r\n            \"question_type_id\": 6,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 34,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Preséntate ante tu Guía de Patrulla antes de ir a Campamento y muéstrale que sabes preparar el Equipo personal de campamento\",\r\n            \"question_type\": \"Campismo y Aire Libre\",\r\n            \"question_type_id\": 6,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 35,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra cuáles son las medidas de seguridad a la hora de portar la mochila\",\r\n            \"question_type\": \"Campismo y Aire Libre\",\r\n            \"question_type_id\": 6,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 36,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes cuáles son las recomendaciones para el uso de calzado, ropa y el aseo personal en campamento\",\r\n            \"question_type\": \"Campismo y Aire Libre\",\r\n            \"question_type_id\": 6,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 37,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explícale a tu patrulla cuál es el equipo de campismo y de cocina que se debe llevar a un campamento de dos noches y tres días\",\r\n            \"question_type\": \"Campismo y Aire Libre\",\r\n            \"question_type_id\": 6,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 38,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explica cuáles son los cuidados que se deben tener con los medicamentos\",\r\n            \"question_type\": \"Campismo y Aire Libre\",\r\n            \"question_type_id\": 6,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 39,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"¿Te has preguntado cómo se hace un buen menú para campamento? Apréndelos y verás que en la próxima excursión o campamento la pasarás muy bien\",\r\n            \"question_type\": \"Cocina y Nutrición\",\r\n            \"question_type_id\": 7,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 40,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes cuál es la ubicación de la cocina en campamento\",\r\n            \"question_type\": \"Cocina y Nutrición\",\r\n            \"question_type_id\": 7,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 41,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Cuáles son las medidas higiénicas que se debe tener en la cocina\",\r\n            \"question_type\": \"Cocina y Nutrición\",\r\n            \"question_type_id\": 7,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 42,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Las medidas de seguridad con los utensilios de cocina\",\r\n            \"question_type\": \"Cocina y Nutrición\",\r\n            \"question_type_id\": 7,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 43,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Cuidados que se deben tener con los utensilios personales para comer\",\r\n            \"question_type\": \"Cocina y Nutrición\",\r\n            \"question_type_id\": 7,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 44,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Has escuchado de las señales de pista, te has preguntado ¿Qué son? ¿Te gustaría saber cómo se utilizan? Investiga y aprende la técnica\",\r\n            \"question_type\": \"Acecho y Observación\",\r\n            \"question_type_id\": 8,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 45,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes reconocer las señales de pista artificiales y naturales\",\r\n            \"question_type\": \"Acecho y Observación\",\r\n            \"question_type_id\": 8,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 46,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Sigue una pista trazada con signos artificiales en el campo\",\r\n            \"question_type\": \"Acecho y Observación\",\r\n            \"question_type_id\": 8,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 47,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes cuáles son las señales de pista\",\r\n            \"question_type\": \"Acecho y Observación\",\r\n            \"question_type_id\": 8,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 48,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Sigue una pista trazada con señales de pista\",\r\n            \"question_type\": \"Acecho y Observación\",\r\n            \"question_type_id\": 8,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 49,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra y explica cómo dejar señales de pistas en una ruta de rastreo\",\r\n            \"question_type\": \"Acecho y Observación\",\r\n            \"question_type_id\": 8,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 50,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Te reto a conocer sobre internet y a que trabajes el programa mundial de Surf Smart y saques la especialidad de Redes o Internet\",\r\n            \"question_type\": \"Comunicación\",\r\n            \"question_type_id\": 9,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 51,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Conversa con tu Dirigente para obtener la especialidad de Redes o Internet\",\r\n            \"question_type\": \"Comunicación\",\r\n            \"question_type_id\": 9,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 52,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Conversa con tu Guía de Patrulla sobre la seguridad que se debe tener en la internet\",\r\n            \"question_type\": \"Comunicación\",\r\n            \"question_type_id\": 9,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 53,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Organiza para tu patrulla para trabajar la Insignia Surf Smart\",\r\n            \"question_type\": \"Comunicación\",\r\n            \"question_type_id\": 9,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 54,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Mencione las características que tienen internet para la vida diaria de las personas\",\r\n            \"question_type\": \"Comunicación\",\r\n            \"question_type_id\": 9,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 55,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explique los siguientes servicios que se encuentran en la internet: Correo electrónico [e-mail], navegadores, buscadores, Jota Joti, Wikipedia, Comercio electrónico [E-comerce]\",\r\n            \"question_type\": \"Comunicación\",\r\n            \"question_type_id\": 9,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 56,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"¿Por dónde sale el sol? ¿Hacia dónde miran las puertas de las iglesias? ¿Sabes ubicarte en una ciudad? No… Investiga y aprende tips para poder orientarte en la ciudad\",\r\n            \"question_type\": \"Navegación Terrestre\",\r\n            \"question_type_id\": 10,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 57,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Con ayuda de tu Guía de Patrulla prepara una actividad sobre los puntos cardinales y aplicada en una Reunión de Patrulla\",\r\n            \"question_type\": \"Navegación Terrestre\",\r\n            \"question_type_id\": 10,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 58,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra con una brújula que las direcciones y los rumbos\",\r\n            \"question_type\": \"Navegación Terrestre\",\r\n            \"question_type_id\": 10,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 59,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Investiga qué otras formas se pueden utilizar que permiten orientarse\",\r\n            \"question_type\": \"Navegación Terrestre\",\r\n            \"question_type_id\": 10,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 60,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"En Reunión de Patrulla explica al menos una forma de orientación que investigaste\",\r\n            \"question_type\": \"Navegación Terrestre\",\r\n            \"question_type_id\": 10,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 61,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Recuerda que los hábitos de higiene son muy importantes, su principal objetivo es cuidarte. Prepárate, aprende cuáles son y aplícalos en tu vida\",\r\n            \"question_type\": \"Salud y Seguridad\",\r\n            \"question_type_id\": 11,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 62,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explique por qué se debe dormir el tiempo suficiente\",\r\n            \"question_type\": \"Salud y Seguridad\",\r\n            \"question_type_id\": 11,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 63,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra y organiza tu tiempo para el descanso necesario\",\r\n            \"question_type\": \"Salud y Seguridad\",\r\n            \"question_type_id\": 11,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 64,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Aprende y practica las reglas básicas de higiene para: cuidar tu cuerpo; La piel, los dientes, los ojos, los oídos y los pulmones\",\r\n            \"question_type\": \"Salud y Seguridad\",\r\n            \"question_type_id\": 11,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 65,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Es importante que conozcas los símbolos nacionales, su historia, cuando los declararon símbolos nacionales, y lo más importante, es saber su verdadero significado para los costarricenses. Prepárate y aprende\",\r\n            \"question_type\": \"Civismo\",\r\n            \"question_type_id\": 12,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 66,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Describa la Bandera de Costa Rica\",\r\n            \"question_type\": \"Civismo\",\r\n            \"question_type_id\": 12,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 67,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explica por qué y demuestra cómo debe respetarse la Bandera\",\r\n            \"question_type\": \"Civismo\",\r\n            \"question_type_id\": 12,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 68,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Demuestra que sabes izar y arrear de la bandera\",\r\n            \"question_type\": \"Civismo\",\r\n            \"question_type_id\": 12,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 69,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explica por qué y demuestra cómo doblar la bandera\",\r\n            \"question_type\": \"Civismo\",\r\n            \"question_type_id\": 12,\r\n            \"user_answer\": 0\r\n        },\r\n        {\r\n            \"id\": 70,\r\n            \"progress_type\": \"Brújula Bronce\",\r\n            \"progress_type_id\": 1,\r\n            \"question\": \"Explica por qué y demuestra cuál es la forma correcta para que ondee la bandera\",\r\n            \"question_type\": \"Civismo\",\r\n            \"question_type_id\": 12,\r\n            \"user_answer\": 0\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/progress/evaluate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"progress",
+								"evaluate"
 							]
 						}
 					},

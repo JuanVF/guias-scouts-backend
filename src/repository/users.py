@@ -94,6 +94,44 @@ def get_all_users():
         return []
 
 
+def get_all_users_by_patrol(patrol: str):
+    """
+    Returns all the users by its patrol group
+    """
+    try:
+        params = (patrol, )
+        results = []
+        users_data = connection.execute_read_query("""SELECT 
+                u.id AS user_id,
+                u.fullname AS user_fullname,
+                u.email AS user_email,
+                u.password AS user_password,
+                u.birthday AS user_birthday,
+                u.active AS user_active,
+                u.created_at AS user_created_at,
+                u.id_patrol AS patrol_id,
+                u.id_role AS id_role,
+                p.name AS patrol_name,
+                r.name AS role_name
+            FROM 
+                `guias-scouts`.t_users_table u
+            LEFT JOIN 
+                `guias-scouts`.t_patrols_table p ON u.id_patrol = p.id
+            INNER JOIN 
+                `guias-scouts`.t_roles_table r ON u.id_role = r.id
+            WHERE
+                u.active = 1 AND p.name = %s;""", params)
+
+        if users_data and len(users_data) > 0:
+            for data in users_data:
+                results.append(User(*data).to_dict())
+
+        return results
+    except Exception as e:
+        print(f"get_all_users_by_patrol error: {e}")
+        return []
+
+
 def get_user_by_email(email: str):
     """
     Query an user by its email

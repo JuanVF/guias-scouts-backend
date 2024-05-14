@@ -26,7 +26,7 @@ from controller.authorization_middleware import extract_jwt_token
 
 from common.response import get_response
 
-from service.users import change_password as service_change_password, reestablish_user_password_by_email, get_all_active_users
+from service.users import change_password as service_change_password, reestablish_user_password_by_email, get_all_active_users, get_all_active_users_by_patrol
 from service.users import create_user, get_user, update_user
 from service.users import ERROR_MESSAGE, ERROR_PASSWORD_MISMATCH, ERROR_USER_DOES_NOT_EXISTS
 
@@ -192,6 +192,53 @@ def method_get_all_users(decoded_token):
         return get_response(200, {"users": users})
     except Exception as e:
         return get_response(500, {"message": "An error occurred while fetching user profile"})
+
+
+@user_blueprint.route("/get-all-by-patrol", methods=['GET'])
+@extract_jwt_token()
+def method_get_all_users_by_patrol(decoded_token):
+    """
+    Get User Profile Endpoint, retrieves user information.
+    ---
+    tags:
+      - user
+    responses:
+      200:
+        description: Successful operation
+        schema:
+          type: object
+          properties:
+            user:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                email:
+                  type: string
+                birthday:
+                  type: number
+                  format: epoch_time
+                patrol_name:
+                  type: string
+                role_name:
+                  type: string
+      404:
+        description: User not found
+      500:
+        description: An error occurred while fetching user profile
+    """
+    # Only admins can read all users
+    if decoded_token['role'] != DIRIGENTE_ROLE:
+        return get_response(401, {"message": "Not enough privileges..."})
+
+    try:
+        patrol = request.args.get('patrol', None)
+
+        users = get_all_active_users_by_patrol(patrol)
+
+        return get_response(200, {"users": users})
+    except Exception as e:
+        return get_response(500, {"message": "An error occurred while fetching user patrols"})
 
 
 @user_blueprint.route("/register-user", methods=['POST'])
