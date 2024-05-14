@@ -103,6 +103,25 @@ def reestablish_user_password_by_email(email: str):
     return ""
 
 
+def service_archive_user(user_id: int):
+    """
+    Service that can archive an user
+    """
+    user = get_user_by_id(user_id)
+
+    if not user:
+        return ERROR_USER_DOES_NOT_EXISTS
+
+    user.active = 0
+
+    updated = update_user_by_id(user)
+
+    if not updated:
+        return ERROR_MESSAGE
+
+    return ""
+
+
 def get_user(user_id: str) -> dict:
     """
     Service that can get the user information by its id

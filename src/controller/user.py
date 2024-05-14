@@ -26,7 +26,7 @@ from controller.authorization_middleware import extract_jwt_token
 
 from common.response import get_response
 
-from service.users import change_password as service_change_password, reestablish_user_password_by_email, get_all_active_users, get_all_active_users_by_patrol
+from service.users import change_password as service_change_password, reestablish_user_password_by_email, get_all_active_users, get_all_active_users_by_patrol, service_archive_user
 from service.users import create_user, get_user, update_user
 from service.users import ERROR_MESSAGE, ERROR_PASSWORD_MISMATCH, ERROR_USER_DOES_NOT_EXISTS
 
@@ -418,3 +418,60 @@ def reestablish_password(decoded_token):
     except Exception as e:
         print(e)
         return get_response(500, {"message": "An error ocurred while trying to reestablish the password"})
+
+
+@user_blueprint.route("/delete-user", methods=['DELETE'])
+@extract_jwt_token()
+def method_archive_patrol(decoded_token):
+    """
+    Can delete a patrol by its name
+    ---
+    tags:
+      - patrol
+    consumes:
+      - application/json
+    parameters:
+      - in: body
+        name: body
+        description: User's password data
+        required: true
+        schema:
+          type: object
+          required:
+            - prevPassword
+            - newPassword
+          properties:
+            prevPassword:
+              type: string
+              format: password
+              example: your_old_password
+            newPassword:
+              type: string
+              format: password
+              example: your_new_password
+    responses:
+      200:
+        description: Password Changed successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: Response Message
+              example: OK
+      400:
+        description: Invalid Body
+      401:
+        description: Invalid Code
+    """
+    try:
+        user_id = request.args.get('id', None)
+
+        result = service_archive_user(int(user_id))
+
+        if result != "":
+            return get_response(500, {"message": "An error happened"})
+
+        return get_response(200, {"message": "OK"})
+    except:
+        return get_response(400, {"message": "Invalid Body"})
