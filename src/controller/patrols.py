@@ -25,12 +25,11 @@ from controller.common_middleware import is_json_content_type
 from controller.authorization_middleware import extract_jwt_token
 
 from controller.patrols_model import AddPatrol
-from service.patrols import service_add_patrol
+from service.patrols import service_add_patrol, service_delete_patrol
 
 from common.response import get_response
 
 from repository.users import DIRIGENTE_ROLE
-
 
 patrol_blueprint = Blueprint('patrol', __name__, url_prefix='/patrol')
 
@@ -84,6 +83,63 @@ def method_add_patrol(decoded_token):
         body = AddPatrol(**request.json)
 
         result = service_add_patrol(body.name)
+
+        if result != "":
+            return get_response(500, {"message": "An error happened"})
+
+        return get_response(200, {"message": "OK"})
+    except:
+        return get_response(400, {"message": "Invalid Body"})
+
+
+@patrol_blueprint.route("/delete-patrol", methods=['DELETE'])
+@extract_jwt_token()
+def method_delete_patrol(decoded_token):
+    """
+    Can delete a patrol by its name
+    ---
+    tags:
+      - patrol
+    consumes:
+      - application/json
+    parameters:
+      - in: body
+        name: body
+        description: User's password data
+        required: true
+        schema:
+          type: object
+          required:
+            - prevPassword
+            - newPassword
+          properties:
+            prevPassword:
+              type: string
+              format: password
+              example: your_old_password
+            newPassword:
+              type: string
+              format: password
+              example: your_new_password
+    responses:
+      200:
+        description: Password Changed successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: Response Message
+              example: OK
+      400:
+        description: Invalid Body
+      401:
+        description: Invalid Code
+    """
+    try:
+        patrol = request.args.get('name', None)
+
+        result = service_delete_patrol(patrol)
 
         if result != "":
             return get_response(500, {"message": "An error happened"})

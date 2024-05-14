@@ -55,5 +55,21 @@ def add_patrol(name: str) -> Optional[int]:
 
         return None
     except Exception as error:
-        print("Error saving user:", error)
+        print("Error saving patrol:", error)
+        return None
+
+
+def delete_patrol(name: str) -> Optional[int]:
+    """
+    Saves a new patrol group
+    """
+    try:
+        params = (name, )
+
+        connection.execute_query(
+            """DELETE FROM `guias-scouts`.t_patrols_table WHERE name = %s;""", params)
+
+        return 1
+    except Exception as error:
+        print("Error deleting patrol:", error)
         return None

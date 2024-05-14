@@ -22,7 +22,7 @@
 
 from common.config import config
 
-from repository.patrols import add_patrol
+from repository.patrols import add_patrol, delete_patrol
 
 ERROR_MESSAGE = "ERROR_MESSAGE"
 
@@ -34,6 +34,18 @@ def service_add_patrol(name: str) -> str:
     patrol_id = add_patrol(name)
 
     if not patrol_id:
+        return ERROR_MESSAGE
+
+    return ""
+
+
+def service_delete_patrol(name: str) -> str:
+    """
+    Service that can change the user password. Return empty string if everything is right
+    """
+    result = delete_patrol(name)
+
+    if not result:
         return ERROR_MESSAGE
 
     return ""
