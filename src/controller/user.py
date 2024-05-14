@@ -351,12 +351,13 @@ def update_existing_user(decoded_token):
       500:
         description: An error occurred while registering the user
     """
-    # Only admins can create users
-    if decoded_token['role'] != DIRIGENTE_ROLE:
-        return get_response(401, {"message": "Not enough privileges..."})
 
     try:
         body = UpdateUserBody(**request.json)
+
+        # Only admins can edit other users
+        if str(decoded_token['user_id']) != str(body.id) and decoded_token['role'] != DIRIGENTE_ROLE:
+            return get_response(401, {"message": "Not enough privileges..."})
 
         updated = update_user(body.id, body.fullname, body.email,
                               body.birthday, body.id_patrol, body.id_role)
