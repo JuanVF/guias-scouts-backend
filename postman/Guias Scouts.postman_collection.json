@@ -649,6 +649,82 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Patrullas",
+			"item": [
+				{
+					"name": "Add Patrol",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Testing Patrol\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/patrol/add-patrol",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"patrol",
+								"add-patrol"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Patrol",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/patrol/delete-patrol?name=Testing",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"patrol",
+								"delete-patrol"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Testing"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

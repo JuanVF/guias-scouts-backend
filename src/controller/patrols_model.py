@@ -19,35 +19,8 @@
 # of this software, even if advised of the possibility of such damage.
 
 # For licensing opportunities, please contact tropa92cr@gmail.com.
-from flask import Flask, send_from_directory
-from controller.authentication import auth_blueprint
-from controller.health import health_blueprint
-from controller.user import user_blueprint
-from controller.material import material_blueprint
-from controller.progress import progress_blueprint
-from controller.patrols import patrol_blueprint
-from flasgger import Swagger
-from flask_cors import CORS
-
-app = Flask(__name__)
-
-swagger = Swagger(app)
-CORS(app)
-
-# All routes
-app.register_blueprint(auth_blueprint)
-app.register_blueprint(health_blueprint)
-app.register_blueprint(user_blueprint)
-app.register_blueprint(material_blueprint)
-app.register_blueprint(progress_blueprint)
-app.register_blueprint(patrol_blueprint)
+from pydantic import BaseModel
 
 
-@app.route('/static/<filename>')
-def download_file(filename):
-    directory = app.static_folder  # Assuming file is in the static folder
-    return send_from_directory(directory, filename, as_attachment=True, download_name=filename)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+class AddPatrol(BaseModel):
+    name: str
