@@ -61,7 +61,6 @@ def get_all_users():
     Returns all the active users
     """
     try:
-        params = ()
         results = []
         users_data = connection.execute_read_query("""SELECT 
                 u.id AS user_id,
@@ -82,7 +81,7 @@ def get_all_users():
             INNER JOIN 
                 `guias-scouts`.t_roles_table r ON u.id_role = r.id
             WHERE
-                u.active = 1;""", params)
+                u.active = 1;""", None)
 
         if users_data and len(users_data) > 0:
             for data in users_data:

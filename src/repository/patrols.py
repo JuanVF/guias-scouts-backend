@@ -73,3 +73,28 @@ def delete_patrol(name: str) -> Optional[int]:
     except Exception as error:
         print("Error deleting patrol:", error)
         return None
+
+
+def get_patrols():
+    """
+    Get all the patrols
+    """
+    try:
+        patrols = []
+
+        # Ensure `q` is safely parameterized; `%s` is the placeholder for PyMySQL.
+        query = """
+        SELECT id, name
+        FROM `guias-scouts`.t_patrols_table;
+        """
+
+        patrols_data = connection.execute_read_query(query, None)
+
+        if patrols_data and len(patrols_data) > 0:
+            for data in patrols_data:
+                patrols.append(Patrol(*data).to_dict())
+
+        return patrols
+    except Exception as err:
+        print(f"Error: {err}")
+        return []

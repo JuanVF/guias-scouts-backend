@@ -25,7 +25,7 @@ from controller.common_middleware import is_json_content_type
 from controller.authorization_middleware import extract_jwt_token
 
 from controller.patrols_model import AddPatrol
-from service.patrols import service_add_patrol, service_delete_patrol
+from service.patrols import service_add_patrol, service_delete_patrol, service_get_patrols
 
 from common.response import get_response
 
@@ -146,4 +146,57 @@ def method_delete_patrol(decoded_token):
 
         return get_response(200, {"message": "OK"})
     except:
+        return get_response(400, {"message": "Invalid Body"})
+
+
+@patrol_blueprint.route("/get-all", methods=['GET'])
+@extract_jwt_token()
+def method_get_patrols(decoded_token):
+    """
+    Can delete a patrol by its name
+    ---
+    tags:
+      - patrol
+    consumes:
+      - application/json
+    parameters:
+      - in: body
+        name: body
+        description: User's password data
+        required: true
+        schema:
+          type: object
+          required:
+            - prevPassword
+            - newPassword
+          properties:
+            prevPassword:
+              type: string
+              format: password
+              example: your_old_password
+            newPassword:
+              type: string
+              format: password
+              example: your_new_password
+    responses:
+      200:
+        description: Password Changed successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: Response Message
+              example: OK
+      400:
+        description: Invalid Body
+      401:
+        description: Invalid Code
+    """
+    try:
+        result = service_get_patrols()
+
+        return get_response(200, {"message": "OK", "patrols": result})
+    except Exception as e:
+        print(e)
         return get_response(400, {"message": "Invalid Body"})

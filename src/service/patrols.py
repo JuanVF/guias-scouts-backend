@@ -22,14 +22,14 @@
 
 from common.config import config
 
-from repository.patrols import add_patrol, delete_patrol
+from repository.patrols import add_patrol, delete_patrol, get_patrols
 
 ERROR_MESSAGE = "ERROR_MESSAGE"
 
 
 def service_add_patrol(name: str) -> str:
     """
-    Service that can change the user password. Return empty string if everything is right
+    Service that can add a patrol
     """
     patrol_id = add_patrol(name)
 
@@ -41,7 +41,7 @@ def service_add_patrol(name: str) -> str:
 
 def service_delete_patrol(name: str) -> str:
     """
-    Service that can change the user password. Return empty string if everything is right
+    Service that can delete a patrol
     """
     result = delete_patrol(name)
 
@@ -49,3 +49,10 @@ def service_delete_patrol(name: str) -> str:
         return ERROR_MESSAGE
 
     return ""
+
+
+def service_get_patrols() -> str:
+    """
+    Service that can get all patrols
+    """
+    return get_patrols()
