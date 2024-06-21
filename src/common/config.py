@@ -33,7 +33,7 @@ class Config:
         self.SECRET_KEY_JWT = os.getenv('SECRET_KEY_JWT', 'wiuwiuwiu')
         self.SENDER_EMAIL = os.getenv('SENDER_EMAIL', 'tropa92cr@gmail.com')
         self.SENDER_EMAIL_PASSWORD = os.getenv(
-            'SENDER_EMAIL_PASSWORD', 'xteg jikb icmz ibup')
+            'SENDER_EMAIL_PASSWORD', 'wiu wiu wiu wiu')
 
 
 config = Config()
